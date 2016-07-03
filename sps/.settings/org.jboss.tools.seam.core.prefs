@@ -1,0 +1,16 @@
+#Wed Aug 06 19:35:32 BST 2008
+action.package=com.mydomain.sps.bean
+action.sources=/sps/src/hot
+eclipse.preferences.version=1
+model.package=com.mydomain.sps.entities
+model.sources=/sps/src/main
+seam.ejb.project=sps
+seam.project.connection.profile=
+seam.project.deployment.type=ear
+seam.project.settings.version=1.1
+seam.project.web.root.folder=/sps/view
+seam.runtime.name=
+seam.test.creating=true
+seam.test.project=sps
+test.package=com.mydomain.sps.test
+test.sources=/sps/src/test
