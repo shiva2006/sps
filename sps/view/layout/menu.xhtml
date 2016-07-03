@@ -1,4 +1,4 @@
-<rich:toolbar
+<rich:toolbar height="50"
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:h="http://java.sun.com/jsf/html"
@@ -7,12 +7,45 @@
     xmlns:rich="http://richfaces.org/rich">
     <rich:toolbarGroup>
         <h:outputText value="#{projectName}:"/>
-        <s:link id="menuHomeId" view="/home.xhtml" value="Home" propagation="none"/>
+        <s:link id="menuHomeId" view="/home.xhtml" value="Home" propagation="none"
+        	style="font-size: 12px"/>
+        <h:outputText value="|"/>
+        
+        <s:link view="/home.xhtml" value="Concentration" propagation="none"
+        	style="font-size: 12px"/>
+        <h:outputText value="|"/>
+        
+        <s:link view="/home.xhtml" value="SPS Users" propagation="none"
+        	style="font-size: 12px"/>
+        <h:outputText value="|"/>
+        
+         <s:link view="/home.xhtml" value="Students" propagation="none"
+        	style="font-size: 12px"/>
+        <h:outputText value="|"/>
+        
+        <s:link view="/home.xhtml" value="Advisors" propagation="none"
+        	style="font-size: 12px"/>
+        <h:outputText value="|"/>
+        
+        <s:link view="/home.xhtml" value="Reset Password Request" propagation="none"
+        	style="font-size: 12px"/>
+        
     </rich:toolbarGroup>
     <!-- @newMenuItem@ -->
     <rich:toolbarGroup location="right">
-        <h:outputText id="menuWelcomeId" value="signed in as: #{credentials.username}" rendered="#{identity.loggedIn}"/>
-        <s:link id="menuLoginId" view="/login.xhtml" value="Login" rendered="#{not identity.loggedIn}" propagation="none"/>
-        <s:link id="menuLogoutId" view="/home.xhtml" action="#{identity.logout()}" value="Logout" rendered="#{identity.loggedIn}" propagation="none"/>
+        <h:outputText id="menuWelcomeId" value="Signed in as: #{credentials.username}" rendered="#{identity.loggedIn}"/>
+        <h:outputText value="|"/>
+        <s:link view="/home.xhtml" value="Password Reset" propagation="none"
+        	style="font-size: 12px"/>
+        <h:outputText value="|"/>
+        
+        <s:link view="/home.xhtml" value="Help" propagation="none"
+        	style="font-size: 12px"/>
+        <h:outputText value="|"/>
+        
+        <s:link id="menuLoginId" view="/login.xhtml" value="Login" rendered="#{not identity.loggedIn}" propagation="none"
+        	style="font-size: 12px"/>
+        <s:link id="menuLogoutId" view="/home.xhtml" action="#{identity.logout()}" value="Logout" rendered="#{identity.loggedIn}" propagation="none"
+        	style="font-size: 12px"/>
     </rich:toolbarGroup>
 </rich:toolbar>

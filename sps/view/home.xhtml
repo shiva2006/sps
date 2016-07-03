@@ -9,7 +9,11 @@
     template="layout/template.xhtml">
 
     <ui:define name="body">
-
+		
+		<h:messages id="messages" globalOnly="true" styleClass="message"
+            errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg"
+            rendered="#{showGlobalMessages != 'false'}"/>
+		
         <h1>Welcome to Seam!</h1>
         <rich:panel>
             <h:panelGrid columns="2">
@@ -32,6 +36,6 @@
                 </s:div>
             </h:panelGrid>
         </rich:panel>
-
+	
     </ui:define>
 </ui:composition>
