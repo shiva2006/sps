@@ -35,7 +35,7 @@ public class StudentConcentration extends BaseEntity {
 	@Column(name="ADVISOR")
 	private Integer advisor;
 	
-	@Column(name="ADVISOR")
+	@Column(name="ENTRY_DATE")
 	private Date entryDate;
 	
 	@Column(name="EMAIL_TEMPLATE_ID")
