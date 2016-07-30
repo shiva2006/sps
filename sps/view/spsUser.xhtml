@@ -1,0 +1,102 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+
+    <h:form id="userForm">
+
+        <rich:panel style="width: 500px;margin-left: 30%;">
+            <f:facet name="header">User</f:facet>
+              <h:inputText id="userSearch" value="#{userMgr.searchKey}">
+              </h:inputText>              
+              <h:commandButton id="searchBtn" value="Search" action="#{userMgr.searchUsers}" 
+              		update="userForm:userTable" style="margin-left: 5px;"/>
+              <h:commandButton id="resetBtn" value="Reset" action="#{userMgr.loadUsers}" 
+              		update="userForm:userTable" style="margin-left: 5px;"/>
+              <br/><br/>
+			<rich:dataTable var="user" value="#{userMgr.userList}" id="userTable" rows="10">
+	        <f:facet name="header">
+	            <rich:columnGroup>	            
+		            <rich:column>
+		                <h:outputText value="S No." />
+		            </rich:column>				
+	                <rich:column>
+	                	<h:outputText value="User name" />
+	                </rich:column>
+	                <rich:column>
+	                    <h:outputText value="Login Id" />
+	                </rich:column>
+	                <rich:column>
+	                    <h:outputText value="Role" />
+	                </rich:column>
+	                <rich:column>
+	                    <h:outputText value="Email Id" />
+	                </rich:column>
+	                <rich:column>
+	                    <h:outputText value="Active" />
+	                </rich:column>                
+	            </rich:columnGroup>
+	        </f:facet>
+	        <rich:column>
+                <h:outputText value="#{userMgr.userList.indexOf(user)+1}" />               
+            </rich:column>
+	        <rich:column>
+                <h:outputText value="#{user.userName}" />               
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{user.loginId}" />                   
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{user.role}" />                   
+            </rich:column>
+             <rich:column>
+                <h:outputText value="#{user.emailId}" />                   
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{user.active}" />               
+            </rich:column>
+	        
+        	</rich:dataTable>
+        	<br/>
+        	<rich:dataScroller for="userTable" maxPages="5" fastStep="3"/>
+        	<br/>
+        	<a4j:commandButton id="addUser" value="Add User" actionListener="#{userMgr.showDialog}"
+        		render="popup" />
+        </rich:panel>
+    
+
+	
+		<rich:popupPanel id="popup" modal="false" autosized="true" resizeable="false" show="#{userMgr.showUserPopup}">
+	        <f:facet name="header">
+	            <h:outputText value="Add User" />
+	        </f:facet>
+	        <f:facet name="controls">
+	            <h:outputLink value="#" onclick="#{rich:component('popup')}.hide(); return false;" style="color: inherit">
+	                X
+	            </h:outputLink>
+	        </f:facet>
+	        <h:panelGrid columns="2" rowClasses="prop" columnClasses="name,value">
+		        <h:outputLabel for="username">User name</h:outputLabel>
+		        <h:inputText id="username" value="#{userMgr.user.userName}" />
+	            <h:outputLabel for="loginId">Login Id</h:outputLabel>
+	            <h:inputText id="loginId" value="#{userMgr.user.loginId}"/>
+	            <h:outputLabel for="role">Role</h:outputLabel>
+		        <h:inputText id="role" value="#{userMgr.user.role}"/>
+		        <h:outputLabel for="email">Email Id</h:outputLabel>
+		        <h:inputText id="email" value="#{userMgr.user.emailId}"/>
+		       
+	        </h:panelGrid>
+	        <br/>
+	        <a4j:commandButton id="userSave" value="Save" action="#{userMgr.addUser}"/>
+	    </rich:popupPanel>
+    </h:form>
+ </ui:define>
+</ui:composition>
