@@ -3,6 +3,20 @@
       "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
           "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	
+	<query name="getUserQ">
+		<![CDATA[
+			select user from User user where user.loginId=?1 and user.password=?2
+		]]>
+	</query>
+	<query name="getAllUsers">
+		<![CDATA[
+			select user from User user
+		]]>
+	</query>
+	<query name="getSearchUser">
+		<![CDATA[
+			select user from User user where user.loginId like ?1 
+		]]>
+	</query>
 	
 </hibernate-mapping>
