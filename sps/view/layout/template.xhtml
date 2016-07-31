@@ -18,7 +18,7 @@
    </h:head>
    <h:form>
    <h:body>
-      <ui:include src="menu.xhtml">
+      <ui:include src="menu.xhtml" rendered="#{identity.loggedIn}">
          <ui:param name="projectName" value="Student Profile System"/>
       </ui:include>
       <div class="body">
