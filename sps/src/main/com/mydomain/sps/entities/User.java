@@ -7,7 +7,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity @Table(name="sps_users")
+import org.jboss.seam.ScopeType;
+import org.jboss.seam.annotations.AutoCreate;
+import org.jboss.seam.annotations.Name;
+import org.jboss.seam.annotations.Scope;
+
+@Entity @Table(name="sps_users") 
+@Name("user") @Scope(ScopeType.SESSION)
+@AutoCreate
 public class User extends BaseEntity {
 
 	/**
@@ -30,6 +37,9 @@ public class User extends BaseEntity {
 	
 	@Column(name="PASSWORD")
 	private String password;
+	
+	@Column(name="Email")
+	private String emailId;	
 	
 	@Column(name="ACTIVE")
 	private boolean active;
@@ -67,6 +77,12 @@ public class User extends BaseEntity {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getEmailId() {
+		return emailId;
+	}
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
 	}
 	public boolean isActive() {
 		return active;
