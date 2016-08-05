@@ -1,0 +1,71 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:s="http://jboss.org/schema/seam/taglib"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:rich="http://richfaces.org/rich"
+    xmlns:a4j="http://richfaces.org/a4j"
+    template="layout/template.xhtml">
+
+<ui:define name="body">
+	<h:form id="concentartionForm">
+		<rich:panel>
+		<h:outputText value="Enter Keyword to search"/>
+		<h:inputText style="margin-left:1%" />
+		<a4j:commandButton value="Search" styleClass="btnStyle" style="margin-left:1%" />
+		<a4j:commandButton value="Reset" styleClass="btnStyle" style="margin-left:1%"/>
+		<br/><br/>
+		
+			<rich:dataTable var="con"  style="width:100%" noDataLabel="No Records Found">
+			<f:facet name="header">
+				<rich:columnGroup>	            
+		            <rich:column>
+		                <h:outputText value="Sl No." />
+		            </rich:column>				
+	                <rich:column>
+	                	<h:outputText value="Concentration Name" />
+	                </rich:column>
+	                <rich:column>
+	                    <h:outputText value="Degree Code" />
+	                </rich:column>
+	                <rich:column>
+	                    <h:outputText value="Faculty name" />
+	                </rich:column>
+	                <rich:column>
+	                    <h:outputText value="Status" />
+	                </rich:column> 
+	                <rich:column>
+	                	<h:outputText value="Edit"/>
+	                </rich:column>              
+	            </rich:columnGroup>
+			</f:facet>
+				<rich:column>
+                <h:outputText value="1 " />               
+            </rich:column>
+            <rich:column>
+                <h:outputText value="1" />                   
+            </rich:column>
+            <rich:column>
+                <h:outputText value="1" />                   
+            </rich:column>
+             <rich:column>
+                <h:outputText value="1" />                   
+            </rich:column>
+            <rich:column>
+                <h:outputText value="1" />               
+            </rich:column>
+            <rich:column>
+            	<a4j:commandButton title="Edit">
+            		<h:graphicImage value="/img/error.gif" alt="edit"/>
+            	</a4j:commandButton>
+            </rich:column>
+			</rich:dataTable>
+			<br/>
+			<a4j:commandButton value="Add"/>
+			<a4j:commandButton value="Edit" style="margin-left:1.2%"/>
+		</rich:panel>
+	</h:form>
+</ui:define>
+</ui:composition>
