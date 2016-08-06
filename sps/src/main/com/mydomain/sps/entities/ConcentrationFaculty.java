@@ -27,7 +27,7 @@ public class ConcentrationFaculty extends BaseEntity {
 	private Concentration concentrationId;
 	
 	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="USER_ID", unique= true, nullable=true, insertable=true, updatable=true)
+	@JoinColumn(name="FACULTY_ID", referencedColumnName="USER_ID", unique= true, nullable=true, insertable=true, updatable=true)
 	private User faculty;
 	
 	@Column(name="ACTIVE")
