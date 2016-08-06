@@ -24,7 +24,7 @@ public class UserMgr extends BaseMgr {
 	 private static final long serialVersionUID = 1L;
 	 private transient static final Logger LOG = Logger.getLogger(UserMgr.class);
 	 @In BaseDao baseDaoImpl;	
-	 private User user;
+	 private User user = new User();
 	 private List<User> userList = new ArrayList<User>();
 	 private String searchKey;
 	 private boolean showUserPopup;
@@ -46,11 +46,14 @@ public class UserMgr extends BaseMgr {
 	public void addUser() {
 		user.setCreatedBy(getLoggedUserId());
 		user.setUpdatedBy(getLoggedUserId());
+		user.setPassword("sps@123");
 		user.setCreatedOn(new Date());
 		user.setUpdatedOn(new Date());
 		user.setActive(Boolean.TRUE);
 		baseDaoImpl.saveObject(user);
 		loadUsers();
+		user = new User();
+		showUserPopup = Boolean.FALSE;
 	}
 
 	public List<User> getUserList() {
