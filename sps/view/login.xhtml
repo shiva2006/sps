@@ -1,18 +1,25 @@
-<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:s="http://jboss.org/schema/seam/taglib"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:rich="http://richfaces.org/rich"
-    template="layout/template.xhtml">
-
-<ui:define name="body">
-
-    <h:form id="loginForm">
-
-        <rich:panel>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:h="http://java.sun.com/jsf/html"
+   xmlns:a="http://richfaces.org/a4j"
+   xmlns:rich="http://richfaces.org/rich"
+   xmlns:s="http://jboss.org/schema/seam/taglib"
+   contentType="text/html">
+<h:html>
+   <h:head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <title>sps</title>
+      <link rel="shortcut icon" href="#{request.contextPath}/favicon.ico"/>
+      
+      <h:outputStylesheet name="theme.css"/>
+      <ui:insert name="head"/>
+   </h:head>
+   <h:form>
+   <h:body>
+      <rich:panel>
             <f:facet name="header">Login</f:facet>
 
             <p>Please login here</p>
@@ -40,8 +47,9 @@
         <div class="actionButtons">
             <h:commandButton id="submit" value="Login" action="#{identity.login}"/>
         </div>
+      
+   </h:body>
+   </h:form>
+</h:html>
+</f:view>
 
-    </h:form>
-
- </ui:define>
-</ui:composition>

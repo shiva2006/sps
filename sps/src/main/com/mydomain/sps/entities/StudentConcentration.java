@@ -35,9 +35,6 @@ public class StudentConcentration extends BaseEntity {
 	@Column(name="ADVISOR")
 	private Integer advisor;
 	
-	@Column(name="ENTRY_DATE")
-	private Date entryDate;
-	
 	@Column(name="EMAIL_TEMPLATE_ID")
 	private Date emailTempleteI;
 	
@@ -93,14 +90,6 @@ public class StudentConcentration extends BaseEntity {
 
 	public void setAdvisor(Integer advisor) {
 		this.advisor = advisor;
-	}
-
-	public Date getEntryDate() {
-		return entryDate;
-	}
-
-	public void setEntryDate(Date entryDate) {
-		this.entryDate = entryDate;
 	}
 
 	public Date getEmailTempleteI() {

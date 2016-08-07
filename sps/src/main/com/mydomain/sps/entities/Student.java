@@ -1,5 +1,7 @@
 package com.mydomain.sps.entities;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,6 +38,9 @@ public class Student extends BaseEntity {
 	
 	@Column(name="UCM_EMAIL")
 	private String ucmMail;
+	
+	@Column(name="ENTRY_DATE")
+	private Date entryDate;
 	
 	@Column(name="OTHER_EMAIL")
 	private String otherMail;
@@ -120,5 +125,12 @@ public class Student extends BaseEntity {
 		this.active = active;
 	}
 
+	public Date getEntryDate() {
+		return entryDate;
+	}
+
+	public void setEntryDate(Date entryDate) {
+		this.entryDate = entryDate;
+	}
 
 }
