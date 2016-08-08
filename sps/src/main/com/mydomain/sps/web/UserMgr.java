@@ -28,6 +28,7 @@ public class UserMgr extends BaseMgr {
 	 private List<User> userList = new ArrayList<User>();
 	 private String searchKey;
 	 private boolean showUserPopup;
+	 private boolean editUser;
 	 
 	public void loadUsers() {
 		searchKey = null;
@@ -36,24 +37,46 @@ public class UserMgr extends BaseMgr {
 
 	public void searchUsers() {
 		userList = baseDaoImpl.find(Constants.GET_SEARCHED_USER, searchKey + "%");
+		editUser = Boolean.FALSE;
 	}
 
 	public void showDialog() {
 		user = new User();
 		showUserPopup = Boolean.TRUE;
+		editUser = Boolean.FALSE;
+	}
+	
+	public void closeDialog()
+	{
+		showUserPopup = Boolean.FALSE;
+		editUser = Boolean.FALSE;
+	}
+	
+	public void showEditDialog(User userObj)
+	{
+		user = userObj;
+		showUserPopup = Boolean.TRUE;
+		editUser = Boolean.TRUE;
 	}
 	
 	public void addUser() {
-		user.setCreatedBy(getLoggedUserId());
-		user.setUpdatedBy(getLoggedUserId());
-		user.setPassword("sps@123");
-		user.setCreatedOn(new Date());
+		user.setUpdatedBy(getLoggedUserId());		
 		user.setUpdatedOn(new Date());
-		user.setActive(Boolean.TRUE);
-		baseDaoImpl.saveObject(user);
+		if(!editUser)
+		{
+			user.setPassword("sps@123");
+			user.setActive(Boolean.TRUE);
+			user.setCreatedBy(getLoggedUserId());
+			user.setCreatedOn(new Date());
+			baseDaoImpl.saveObject(user);
+		}
+		else{
+			baseDaoImpl.update(user);
+		}		
+		showUserPopup = Boolean.FALSE;
+		editUser = Boolean.FALSE;
 		loadUsers();
 		user = new User();
-		showUserPopup = Boolean.FALSE;
 	}
 
 	public List<User> getUserList() {
@@ -82,6 +105,14 @@ public class UserMgr extends BaseMgr {
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public boolean isEditUser() {
+		return editUser;
+	}
+
+	public void setEditUser(boolean editUser) {
+		this.editUser = editUser;
 	}
 	 
 }
