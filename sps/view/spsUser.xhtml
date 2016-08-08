@@ -12,17 +12,18 @@
 
    
 
-        <rich:panel style="width: 500px;margin-left: 30%;">
+        <rich:panel style="margin-left: 25%;margin-right: 25%;">
             <f:facet name="header">User(s)</f:facet>
-              <h:inputText id="userSearch" value="#{userMgr.searchKey}">
-              </h:inputText>              
+            <h:outputText value="Enter Login id to search"/>
+              <h:inputText id="userSearch" value="#{userMgr.searchKey}" style="margin-left:1%"/>
+                          
               <h:commandButton id="searchBtn" value="Search" action="#{userMgr.searchUsers}" 
               		update="userForm:userTable" style="margin-left: 5px;"/>
               <h:commandButton id="resetBtn" value="Reset" action="#{userMgr.loadUsers}" 
               		update="userForm:userTable" style="margin-left: 5px;"/>
               <br/><br/>
 			<rich:dataTable var="user" value="#{userMgr.userList}" id="userTable" rows="10"
-				rowKeyVar="rowKey">
+				rowKeyVar="rowKey" style="width:100%" >
 	        <f:facet name="header">
 	            <rich:columnGroup>	            
 		            <rich:column>
@@ -42,7 +43,10 @@
 	                </rich:column>
 	                <rich:column>
 	                    <h:outputText value="Active" />
-	                </rich:column>                
+	                </rich:column>   
+	                <rich:column>
+		                <h:outputText value="Action" />
+		            </rich:column>             
 	            </rich:columnGroup>
 	        </f:facet>
 	        <rich:column>
@@ -63,6 +67,12 @@
             <rich:column>
                 <h:outputText value="#{user.active}" />               
             </rich:column>
+             <rich:column>
+                <a4j:commandLink styleClass="no-decor" action="#{userMgr.showEditDialog(user)}"
+                    execute="@this" render="out">
+                    <h:graphicImage value="/img/edit.gif" alt="edit" />                   
+                </a4j:commandLink>           
+            </rich:column>
 	        
         	</rich:dataTable>
         	<br/>
@@ -77,53 +87,70 @@
         
         
         <a4j:outputPanel id="out">
-		<rich:popupPanel modal="true" resizeable="true" show="#{userMgr.showUserPopup}" domElementAttachment="form">
-	        <f:facet name="header">
-	            <h:outputText value="Add User" />
-	        </f:facet>
+		<rich:popupPanel id="userPopup" modal="true" resizeable="false" show="#{userMgr.showUserPopup}"
+		 domElementAttachment="form" autosized="true">
+				<f:facet name="header">
+					<h:outputText value="Add User" rendered="#{not userMgr.editUser}"/>
+					<h:outputText value="Edit User" rendered="#{userMgr.editUser}"/>
+				</f:facet>
+	       
 	        <f:facet name="controls">
-	            <h:outputLink value="#" onclick="#{rich:component('popup')}.hide(); return false;" style="color: inherit">
-	                X
-	            </h:outputLink>
+	            <a4j:commandLink action="#{userMgr.closeDialog}"
+                    execute="@this" render="@form">
+                    <h:graphicImage value="/img/close.png" alt="close" style="margin-top: -1px;"/>                   
+                </a4j:commandLink>       
 	        </f:facet>
-	        <h:panelGrid columns="2">
+		<h:panelGrid id="panelUser" columns="2" border="1" style="width: 100%;">				
 	        	<h:column>
 		        	<h:outputLabel for="username">User name :</h:outputLabel>
 		        </h:column>
 		        <h:column>
-		        	<h:inputText id="username" value="#{userMgr.user.userName}" />
+		        	<h:inputText id="username" value="#{userMgr.user.userName}" style="width: 100%;"/>
 		        </h:column>
+		        
 		        <h:column>
 	            	<h:outputLabel for="loginId">Login Id :</h:outputLabel>
+	            </h:column>	            
+	            <h:column>
+	            	<h:inputText id="loginId" value="#{userMgr.user.loginId}" style="width: 100%;"/>
 	            </h:column>
 	            
 	            <h:column>
-	            	<h:inputText id="loginId" value="#{userMgr.user.loginId}"/>
-	            </h:column>
-	            
-	            <h:column>
-	            	<h:outputLabel for="role">Role :</h:outputLabel>
+	            	<h:outputLabel>Role :</h:outputLabel>
 	            </h:column>
 	            <h:column>
-		        	<h:inputText id="role" value="#{userMgr.user.role}"/>
+		        	<h:selectOneMenu value="#{userMgr.user.role}" style="width: 100%;">
+		        	<f:selectItem itemValue="program director" itemLabel="program director" />
+   					<f:selectItem itemValue="advisor" itemLabel="advisor" />
+   					<f:selectItem itemValue="student" itemLabel="student" />
+		        	</h:selectOneMenu>
 		        </h:column>
 		        
 		        <h:column>
 		        	<h:outputLabel for="email">Email Id :</h:outputLabel>
-		        </h:column>
-		        
+		        </h:column>		        
 		        <h:column>
-		        	<h:inputText id="email" value="#{userMgr.user.emailId}"/>
+		        	<h:inputText id="email" value="#{userMgr.user.emailId}" style="width: 100%;"/>
 		        </h:column>
 		        
-		        
-		       
-	        </h:panelGrid>
-	        <br/>
-	        <a4j:commandButton id="userSave" value="Save" action="#{userMgr.addUser}" execute="@this,out"
-	        	render="@form"/>
+		        <h:column rendered="#{userMgr.editUser}">
+	            	<h:outputLabel>Active :</h:outputLabel>
+	            </h:column>
+	            <h:column rendered="#{userMgr.editUser}">
+		        	<h:selectOneMenu value="#{userMgr.user.active}" style="width: 100%;">
+		        	<f:selectItem itemValue="true" itemLabel="true" />
+   					<f:selectItem itemValue="false" itemLabel="false" />
+		        	</h:selectOneMenu>
+		        </h:column>	       
+	      </h:panelGrid>
+					<h:panelGroup style="display:block; text-align:right">
+						<a4j:commandButton id="userSave" value="Save" action="#{userMgr.addUser}" execute="@this,out"
+	        				render="@form"/>
+						<a4j:commandButton id="cancel" value="Cancel" action="#{userMgr.closeDialog}" render="@form" />
+					</h:panelGroup>
+	          
 	    </rich:popupPanel>
 	    </a4j:outputPanel>
-  
+	   
  </ui:define>
 </ui:composition>
