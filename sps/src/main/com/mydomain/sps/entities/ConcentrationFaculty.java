@@ -19,8 +19,8 @@ public class ConcentrationFaculty extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="CONCENTRATION_FACULTY_ID")
-	private Integer confacultyId;
+	@Column(name="CONCENTRATION_SERIAL_NO")
+	private Integer conSerialNo;
 	
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="CONCENTRATION_ID", unique= true, nullable=true, insertable=true, updatable=true)
@@ -30,19 +30,17 @@ public class ConcentrationFaculty extends BaseEntity {
 	@JoinColumn(name="FACULTY_ID", referencedColumnName="USER_ID", unique= true, nullable=true, insertable=true, updatable=true)
 	private User faculty;
 	
-	@Column(name="ACTIVE")
-	private boolean active;
 	
 	public ConcentrationFaculty() {
 		
 	}
 
 	public Integer getConfacultyId() {
-		return confacultyId;
+		return conSerialNo;
 	}
 
-	public void setConfacultyId(Integer confacultyId) {
-		this.confacultyId = confacultyId;
+	public void setConfacultyId(Integer conSerialNo) {
+		this.conSerialNo = conSerialNo;
 	}
 
 	public Concentration getConcentrationId() {
@@ -61,12 +59,5 @@ public class ConcentrationFaculty extends BaseEntity {
 		this.faculty = faculty;
 	}
 
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
-	}
 	
 }
