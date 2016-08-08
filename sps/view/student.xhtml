@@ -61,11 +61,21 @@
 				execute="@this" render="out">
 			</a4j:commandButton>
 
-
-			<h:panelGrid id="panel" columns="4" border="1" cellpadding="5">
+			<a4j:outputPanel id="out">
+			<rich:popupPanel id="studentPopup" modal="true" resizeable="false" show="#{userMgr.showUserPopup}"
+					 domElementAttachment="form" autosized="true">
 				<f:facet name="header">
 					<h:outputText value="Add Student" />
 				</f:facet>
+	       
+	        <f:facet name="controls">
+	            <h:outputLink value="#" onclick="#{rich:component('studentPopup')}.hide(); return false;" style="color: inherit">
+	                X
+	            </h:outputLink>
+	        </f:facet>
+
+			<h:panelGrid id="panel" columns="4" border="1" cellpadding="5">
+				
 				<h:column>
 					<h:outputLabel value="First Name" />
 				</h:column>
@@ -138,21 +148,18 @@
 
 				<h:column>
 					<h:inputTextarea cols="20" rows="10" />
-				</h:column>
-				<f:facet name="footer">
-					<h:panelGroup style="display:block; text-align:right">
+				</h:column>				
+			</h:panelGrid>
+			<h:panelGroup style="display:block; text-align:right">
 						<h:commandButton id="save" value="Save" />
 						<h:commandButton id="cancel" value="Cancel" />
 					</h:panelGroup>
-				</f:facet>
-			</h:panelGrid>
-
+		</rich:popupPanel>
+		</a4j:outputPanel>
 		</rich:panel>
 
 
-		<a4j:outputPanel id="out">
-			
-		</a4j:outputPanel>
+		
 
 	</ui:define>
 </ui:composition>
