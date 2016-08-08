@@ -18,5 +18,16 @@
 			select user from User user where user.loginId like ?1 
 		]]>
 	</query>
+	<query name="getAllConcentration">
+		<![CDATA[
+			select new com.mydomain.sps.bean.ConcentrationBean(con.concentrationId,con.concentrationName,con.degreeCode,con.active,user.userName) from Concentration con,ConcentrationFaculty conFac,User user 
+			where con.concentrationId = conFac.concentrationId.concentrationId and conFac.faculty.userId = user.userId and user.active = 1
+		]]>
+	</query>
+	<query name="getAllAdvisorUsers">
+		<![CDATA[
+			select user.userId,user.userName from User user where user.active=1 and user.role in ('Advisor')
+		]]>
+	</query>
 	
 </hibernate-mapping>
