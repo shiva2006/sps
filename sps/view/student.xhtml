@@ -13,7 +13,7 @@
 			<f:facet name="header">Students(s)</f:facet>
 			
 			<br />
-			<rich:dataTable var="user" value="#{studentMgr.students}" id="stdTbl"
+			<rich:dataTable var="student" value="#{studentMgr.students}" id="stdTbl"
 				onRowMouseOver="this.style.backgroundColor='#CCCCCC'"
 				style="width:100%" 
 				onRowMouseOut="this.style.backgroundColor='#FFFFFF'"
@@ -43,35 +43,64 @@
 						</rich:column>
 						<rich:column>
 							<h:outputText value="GMAT / GRE Score" />
-						</rich:column>
-						
+						</rich:column>						
 						<rich:column>
 							<h:outputText value="Actions" />
 						</rich:column>
 					</rich:columnGroup>
 				</f:facet>
-				
+				 <rich:column>
+                <h:outputText value="#{rowKey+1}" />               
+	            </rich:column>
+		        <rich:column>
+	                <h:outputText value="#{student.firstName}" />               
+	            </rich:column>
+	            <rich:column>
+	                <h:outputText value="#{student.lastName}" />                   
+	            </rich:column>
+	            <rich:column>
+	                <h:outputText value="#{student.mailingAddress}" />                   
+	            </rich:column>
+	             <rich:column>
+	                <h:outputText value="#{student.otherMail}" />                   
+	            </rich:column>
+	            <rich:column>
+	                <h:outputText value="#{student.phoneNumber}" />                   
+	            </rich:column>
+	            <rich:column>
+	                <h:outputText value="#{student.entryDate}" />                   
+	            </rich:column>
+	            <rich:column>
+	                <h:outputText value="#{student.greScore}" />                   
+	            </rich:column>
+	            <rich:column>
+	                <a4j:commandLink styleClass="no-decor" 
+                    execute="@this" render="out">
+                    <h:graphicImage value="/img/edit.gif" alt="edit" />                   
+                </a4j:commandLink>                    
+	            </rich:column>
 
 			</rich:dataTable>
 			<br />
 			<rich:dataScroller for="stdTbl" maxPages="3" fastStep="3" />
 			<br />
 
-			<a4j:commandButton value="Add Student" action="#{userMgr.showDialog}"
+			<a4j:commandButton value="Add Student" action="#{studentMgr.addStudent}"
 				execute="@this" render="out">
 			</a4j:commandButton>
 
 			<a4j:outputPanel id="out">
-			<rich:popupPanel id="studentPopup" modal="true" resizeable="false" show="#{userMgr.showUserPopup}"
+			<rich:popupPanel id="studentPopup" modal="true" resizeable="false" show="#{studentMgr.showStudnt}"
 					 domElementAttachment="form" autosized="true">
 				<f:facet name="header">
 					<h:outputText value="Add Student" />
 				</f:facet>
 	       
 	        <f:facet name="controls">
-	            <h:outputLink value="#" onclick="#{rich:component('studentPopup')}.hide(); return false;" style="color: inherit">
-	                X
-	            </h:outputLink>
+	           <a4j:commandLink action="#{studentMgr.closeDialog}"
+                    execute="@this" render="@form">
+                    <h:graphicImage value="/img/close.png" alt="close" style="margin-top: -1px;"/>                   
+                </a4j:commandLink> 
 	        </f:facet>
 
 			<h:panelGrid id="panel" columns="4" border="1" cellpadding="5">
@@ -81,14 +110,14 @@
 				</h:column>
 
 				<h:column>
-					<h:inputText />
+					<h:inputText value="#{studentMgr.student.firstName}"/>
 				</h:column>
 				<h:column>
 					<h:outputLabel value="Last Name" />
 				</h:column>
 
 				<h:column>
-					<h:inputText />
+					<h:inputText value="#{studentMgr.student.lastName}"/>
 				</h:column>
 
 				<h:column>
@@ -96,7 +125,7 @@
 				</h:column>
 
 				<h:column>
-					<h:inputText />
+					<h:inputText value="#{studentMgr.student.ucmMail}"/>
 				</h:column>
 
 				<h:column>
@@ -104,7 +133,7 @@
 				</h:column>
 
 				<h:column>
-					<h:inputText />
+					<h:inputText value="#{studentMgr.student.phoneNumber}"/>
 				</h:column>
 
 				<h:column>
@@ -112,7 +141,7 @@
 				</h:column>
 
 				<h:column>
-					<h:inputText />
+					<h:inputText value="#{studentMgr.student.otherMail}"/>
 				</h:column>
 
 				<h:column>
@@ -120,7 +149,11 @@
 				</h:column>
 
 				<h:column>
-					<h:inputText />
+					<h:selectOneMenu value="#{studentMgr.temp}" style="width: 100%;">
+		        	<f:selectItem itemValue="program director" itemLabel="program director" />
+   					<f:selectItem itemValue="advisor" itemLabel="advisor" />
+   					<f:selectItem itemValue="student" itemLabel="student" />
+		        	</h:selectOneMenu>
 				</h:column>
 
 
@@ -139,7 +172,7 @@
 				</h:column>
 
 				<h:column>
-					<h:inputText />
+					<h:inputText value="#{studentMgr.student.greScore}"/>
 				</h:column>
 
 				<h:column>
@@ -147,13 +180,14 @@
 				</h:column>
 
 				<h:column>
-					<h:inputTextarea cols="20" rows="10" />
+					<h:inputTextarea cols="20" rows="10" value="#{studentMgr.student.mailingAddress}"/>
 				</h:column>				
 			</h:panelGrid>
 			<h:panelGroup style="display:block; text-align:right">
-						<h:commandButton id="save" value="Save" />
-						<h:commandButton id="cancel" value="Cancel" />
-					</h:panelGroup>
+						<a4j:commandButton id="studentSave" value="Save" action="#{studentMgr.saveStudent}" execute="@this,out"
+	        				render="@form"/>
+						<a4j:commandButton id="cancel" value="Cancel" action="#{studentMgr.closeDialog}" render="@form" />
+			</h:panelGroup>
 		</rich:popupPanel>
 		</a4j:outputPanel>
 		</rich:panel>
