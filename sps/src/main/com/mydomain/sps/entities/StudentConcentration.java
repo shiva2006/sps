@@ -30,7 +30,7 @@ public class StudentConcentration extends BaseEntity {
 	
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="CONCENTRATION_ID", unique= true, nullable=true, insertable=true, updatable=true)
-	private Concentration concentration;
+	private Concentration concentration = new Concentration();
 	
 	@Column(name="ADVISOR")
 	private Integer advisor;

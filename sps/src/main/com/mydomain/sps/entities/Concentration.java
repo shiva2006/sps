@@ -31,8 +31,15 @@ public class Concentration extends BaseEntity {
 	public Concentration() {
 		
 	}
+	
+	public Concentration(Integer concentrationId, String concentrationName) {
+		super();
+		this.concentrationId = concentrationId;
+		this.concentrationName = concentrationName;
+	}
 
-	public Integer CONCENTRATION_ID() {
+
+	public Integer getConcentrationId() {
 		return concentrationId;
 	}
 

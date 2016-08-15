@@ -18,6 +18,13 @@
 			select user from User user where user.loginId like ?1 
 		]]>
 	</query>
+	
+	<query name="getConcentrations">
+		<![CDATA[
+			select con.concentrationId, con.concentrationName from Concentration con 
+		]]>
+	</query>
+	
 	<query name="getAllStudents">
 		<![CDATA[
 			select student from Student student

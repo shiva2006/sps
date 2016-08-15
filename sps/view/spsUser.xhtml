@@ -67,14 +67,26 @@
             <rich:column>
                 <h:outputText value="#{user.active}" />               
             </rich:column>
-             <rich:column>
-                <a4j:commandLink styleClass="no-decor" action="#{userMgr.showEditDialog(user)}"
-                    execute="@this" render="out">
-                    <h:graphicImage value="/img/edit.gif" alt="edit" />                   
-                </a4j:commandLink>           
-            </rich:column>
-	        
-        	</rich:dataTable>
+			<rich:column>
+				<rich:dropDownMenu mode="ajax">
+					<f:facet name="label">
+						<h:panelGrid cellpadding="0" cellspacing="0" columns="2"
+							style="vertical-align:middle">
+							<h:graphicImage value="/img/edit.gif" alt="edit" />
+						</h:panelGrid>
+					</f:facet>
+					<rich:menuItem mode="ajax">
+						<h:outputText value="Re-set Password" />
+					</rich:menuItem>
+					<rich:menuItem mode="ajax"
+						action="#{userMgr.showEditDialog(user)}" execute="@this"
+						render="out">
+						<h:outputText value="Edit" />
+					</rich:menuItem>
+				</rich:dropDownMenu>
+			</rich:column>
+
+			</rich:dataTable>
         	<br/>
         	<rich:dataScroller for="userTable" maxPages="5" fastStep="3"/>
         	<br/>
@@ -120,9 +132,9 @@
 	            </h:column>
 	            <h:column>
 		        	<h:selectOneMenu value="#{userMgr.user.role}" style="width: 100%;">
-		        	<f:selectItem itemValue="program director" itemLabel="program director" />
-   					<f:selectItem itemValue="advisor" itemLabel="advisor" />
-   					<f:selectItem itemValue="student" itemLabel="student" />
+		        	<f:selectItem itemValue="Program Director" itemLabel="Program Director" />
+   					<f:selectItem itemValue="Advisor" itemLabel="Advisor" />
+   					<f:selectItem itemValue="Student" itemLabel="Student" />
 		        	</h:selectOneMenu>
 		        </h:column>
 		        

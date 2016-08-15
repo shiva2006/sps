@@ -31,8 +31,8 @@ public class Student extends BaseEntity {
 	private String mailingAddress;
 	
 	@Column(name="PHONE_NUMBER")
-	private Integer phoneNumber;
-	
+	private Long phoneNumber;
+
 	@Column(name="GRE_SCORE")
 	private Integer greScore;
 	
@@ -85,11 +85,11 @@ public class Student extends BaseEntity {
 		this.mailingAddress = mailingAddress;
 	}
 
-	public Integer getPhoneNumber() {
+	public Long getPhoneNumber() {
 		return phoneNumber;
 	}
 
-	public void setPhoneNumber(Integer phoneNumber) {
+	public void setPhoneNumber(Long phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 

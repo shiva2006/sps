@@ -9,8 +9,6 @@ import javax.faces.model.SelectItem;
 import org.jboss.seam.Component;
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
-import org.jboss.seam.faces.FacesContext;
-import org.jboss.seam.remoting.RequestContext;
 
 import com.mydomain.sps.bean.ConcentrationBean;
 import com.mydomain.sps.entities.Concentration;

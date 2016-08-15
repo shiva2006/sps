@@ -9,5 +9,6 @@ public interface Constants {
 
 	public static final String GET_ALL_CONCENTRATION = "getAllConcentration";
 	public static final String GET_ALL_ADVISORS = "getAllAdvisorUsers";
+	public static final String GET_CONCENTRATIONS="getConcentrations";
 
 }
