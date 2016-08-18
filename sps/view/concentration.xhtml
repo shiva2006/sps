@@ -58,32 +58,20 @@
                 <h:outputText value="#{con.status}" />               
             </rich:column>
             <rich:column style="text-align: center;">
-            	<a4j:commandButton render="editPopUp" title="Edit" image="/img/edit.gif" actionListener="#{concentrationMgr.editConcentration(con)}" >
+            	<a4j:commandButton render="addEditPopUp" title="Edit" image="/img/edit.gif" actionListener="#{concentrationMgr.editConcentration(con)}" >
             	</a4j:commandButton>
             </rich:column>
 			</rich:dataTable>
 			<br/>
-			<a4j:commandButton value="Add" render="addPopUp" actionListener="#{concentrationMgr.addConcentration}"/>
+			<a4j:commandButton value="Add" render="addEditPopUp" actionListener="#{concentrationMgr.addConcentration}"/>
 		</rich:panel>
+
 		
-		<rich:popupPanel id="editPopUp" header="Edit Concentration" show="#{concentrationBean.visibleFalg}" domElementAttachment="form">
-			<h:panelGrid columns="2">
-				<h:outputLabel value="Concentration Name : " />
-				
-				<h:outputLabel value="Degree Code : "/>
-				
-				<h:outputLabel value="Concentration Faculty : "/>
-				
-				<h:outputLabel value="Status : " />
-				
-				
-			</h:panelGrid>
-			<a4j:commandButton style="float:right;" actionListener="#{concentrationMgr.resetValues}" oncomplete="#{rich:component('editPopUp')}.hide();"  value="Cancel" />
-			<a4j:commandButton style="float:right;" value="Save" render="conTab" actionListener="#{concentrationMgr.saveEditedConcentration}" oncomplete="#{rich:component('editPopUp')}.hide();" />
-		</rich:popupPanel>
-		
-		<rich:popupPanel width="670" height="130" id="addPopUp"  modal="true" header="Add Concentration" show="#{concentrationBean.visibleFalg}" domElementAttachment="form">			
-					
+		<rich:popupPanel width="670" height="130" id="addEditPopUp"  modal="true" show="#{concentrationBean.visibleFalg}" domElementAttachment="form">			
+					<f:facet name="header">
+						<h:outputLabel value="Add Concentration" rendered="#{concentrationBean.addFlag}"/>
+						<h:outputLabel value="Edit Concentration" rendered="#{concentrationBean.editFlag}"/>
+					</f:facet>
 			<h:panelGrid columns="4">
 				<h:outputLabel value="Concentration Name : " />
 				<h:inputText value="#{concentrationBean.concentrationName}"/>
@@ -91,20 +79,21 @@
 				<h:inputText value="#{concentrationBean.degreeCode}"/>
 				<h:outputLabel value="Concentration Faculty : "/>
 				<h:selectOneMenu value="#{concentrationBean.confacultyId}" >
-				<f:selectItem itemValue="0" itemLabel="--SELECT--"/>
+				<f:selectItem itemValue="0" itemLabel="--SELECT--" />
 				<f:selectItems value="#{concentrationBean.advisorUsers}" var="item" itemLabel="#{item[0]}" itemValue="#{item[1]}" />
 				</h:selectOneMenu>
 				<h:outputLabel value="Status : " />
-				<h:selectOneRadio value="#{concentrationBean.status}">
+				<h:selectOneMenu value="#{concentrationBean.status}">
+					<f:selectItem itemValue="null" itemDisabled="true" />
 					<f:selectItem itemLabel="ACTIVE" itemValue="ACTIVE"/>
 					<f:selectItem itemLabel="INACTIVE" itemValue="INACTIVE"/>
-				</h:selectOneRadio>
+				</h:selectOneMenu>
 				
 			</h:panelGrid>
 			 
-				<a4j:commandButton style="float:right;" actionListener="#{concentrationMgr.resetValues}" oncomplete="#{rich:component('addPopUp')}.hide();" value="Cancel" />
-				<a4j:commandButton style="float:right;" render="conTab" value="Save" actionListener="#{concentrationMgr.saveConcentration}" oncomplete="#{rich:component('addPopUp')}.hide();"/>
-			
+				<a4j:commandButton style="float:right;" immediate="true" actionListener="#{concentrationMgr.resetValues}" oncomplete="#{rich:component('addEditPopUp')}.hide();" value="Cancel" />
+				<a4j:commandButton style="float:right;" render="conTab" value="Save" rendered="#{concentrationBean.addFlag}" actionListener="#{concentrationMgr.saveConcentration}" oncomplete="#{rich:component('addPopUp')}.hide();"/>
+				<a4j:commandButton style="float:right;" render="conTab" value="Save" rendered="#{concentrationBean.editFlag}" actionListener="#{concentrationMgr.saveConcentration}" oncomplete="#{rich:component('addPopUp')}.hide();"/>
 		</rich:popupPanel>
 	</h:form>
 </ui:define>

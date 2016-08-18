@@ -1,5 +1,6 @@
 package com.mydomain.sps.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +16,12 @@ import org.jboss.seam.annotations.Scope;
  */
 @Name("concentrationBean")
 @Scope(ScopeType.PAGE)
-public class ConcentrationBean {
+public class ConcentrationBean implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Integer concentrationId;
 	private String concentrationName;
 	private String degreeCode;
@@ -28,6 +33,8 @@ public class ConcentrationBean {
 	private ConcentrationBean editObject;
 	private boolean visibleFalg;
 	private List<SelectItem> advisorUsers;
+	private boolean addFlag;
+	private boolean editFlag;
 	
 	public ConcentrationBean(){
 		
@@ -117,6 +124,22 @@ public class ConcentrationBean {
 
 	public void setAdvisorUsers(List<SelectItem> advisorUsers) {
 		this.advisorUsers = advisorUsers;
+	}
+
+	public boolean isAddFlag() {
+		return addFlag;
+	}
+
+	public void setAddFlag(boolean addFlag) {
+		this.addFlag = addFlag;
+	}
+
+	public boolean isEditFlag() {
+		return editFlag;
+	}
+
+	public void setEditFlag(boolean editFlag) {
+		this.editFlag = editFlag;
 	}
 	
 	

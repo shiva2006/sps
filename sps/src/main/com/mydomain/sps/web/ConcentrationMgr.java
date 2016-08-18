@@ -24,23 +24,32 @@ import com.mydomain.sps.service.Constants;
 @Name("concentrationMgr")
 public class ConcentrationMgr extends BaseMgr {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	ConcentrationBean concentrationBean = (ConcentrationBean) Component.getInstance("concentrationBean");
 	@In
 	BaseDao baseDaoImpl;
  
+	@SuppressWarnings("unchecked")
 	public void loadConcentration(){
 		concentrationBean.setConList(baseDaoImpl.find(Constants.GET_ALL_CONCENTRATION));
 	}
 	
 	public void editConcentration(ConcentrationBean bean){
 		concentrationBean.setVisibleFalg(Boolean.TRUE);
+		concentrationBean.setEditFlag(Boolean.TRUE);
 		concentrationBean.setEditObject(bean);
+		concentrationBean.setConcentrationName(concentrationBean.getEditObject().getConcentrationName());
+		concentrationBean.setDegreeCode(concentrationBean.getEditObject().getDegreeCode());
+		if("ACTIVE".equalsIgnoreCase(concentrationBean.getEditObject().getStatus())){
+			concentrationBean.setStatus("ACTIVE");
+		}else{
+			concentrationBean.setStatus("INACTIVE");
+		}
+		concentrationBean.setConfacultyId(1);
 		
-		System.out.println("-------------------concentartionBean---------------"+concentrationBean.getEditObject());
-		System.out.println("--------------"+concentrationBean.getEditObject().getConcentrationName());
-		System.out.println("--------------"+concentrationBean.getEditObject().getConcentrationId());
-		System.out.println("--------------"+concentrationBean.getEditObject().getFacultyName());
-		System.out.println("--------------"+concentrationBean.getEditObject().getDegreeCode());
 	}
 	
 	public void saveEditedConcentration(){
@@ -49,6 +58,7 @@ public class ConcentrationMgr extends BaseMgr {
 	
 	public void addConcentration(){
 		concentrationBean.setVisibleFalg(Boolean.TRUE);
+		concentrationBean.setAddFlag(Boolean.TRUE);
 		List<?> list =  baseDaoImpl.find(Constants.GET_ALL_ADVISORS);
 		concentrationBean.setAdvisorUsers(new ArrayList<SelectItem>());
 		for(Object obj : list){
@@ -68,12 +78,13 @@ public class ConcentrationMgr extends BaseMgr {
 		concentrationBean.setStatus(null);
 		concentrationBean.setConfacultyId(null);
 		concentrationBean.setVisibleFalg(Boolean.FALSE);
+		concentrationBean.setAddFlag(Boolean.FALSE);
+		concentrationBean.setEditFlag(Boolean.FALSE);
 		System.out.println("------------resetValues() is called---------------");
 	}
 	
 	public void saveConcentration(){
-		if(!concentrationBean.getConcentrationName().trim().isEmpty() || null!=concentrationBean.getConcentrationName() || !concentrationBean.getDegreeCode().trim().isEmpty()
-			|| null!=concentrationBean.getDegreeCode() || !concentrationBean.getStatus().trim().isEmpty() || null!=concentrationBean.getStatus() || null!=concentrationBean.getConfacultyId()){
+		if(this.vaildate()){
 			Concentration con = new Concentration();
 			con.setConcentrationName(concentrationBean.getConcentrationName());
 			con.setDegreeCode(concentrationBean.getDegreeCode());
@@ -102,6 +113,15 @@ public class ConcentrationMgr extends BaseMgr {
 			addMessage("Can't be saved");
 		}
 		
+	}
+	
+	private boolean vaildate(){
+		boolean flag = Boolean.FALSE;
+		if(!concentrationBean.getConcentrationName().trim().isEmpty() || null!=concentrationBean.getConcentrationName() || !concentrationBean.getDegreeCode().trim().isEmpty()
+				|| null!=concentrationBean.getDegreeCode() || !concentrationBean.getStatus().trim().isEmpty() || null!=concentrationBean.getStatus() || null!=concentrationBean.getConfacultyId()){
+			flag = Boolean.TRUE;
+		}
+		return flag;
 	}
 
 }
