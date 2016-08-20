@@ -32,6 +32,12 @@ public class StudentMgr extends BaseMgr {
 	private String searchKey;
 	private boolean showStudnt;
 	private String temp;
+	private String sendTo;
+	private String mailTemplate;
+	
+	public void sendMail() {
+		
+	}
 	
 	public void loadStudents() {
 		searchKey = null;
@@ -127,6 +133,22 @@ public class StudentMgr extends BaseMgr {
 
 	public void setStdConcentration(StudentConcentration stdConcentration) {
 		this.stdConcentration = stdConcentration;
+	}
+
+	public String getSendTo() {
+		return sendTo;
+	}
+
+	public void setSendTo(String sendTo) {
+		this.sendTo = sendTo;
+	}
+
+	public String getMailTemplate() {
+		return mailTemplate;
+	}
+
+	public void setMailTemplate(String mailTemplate) {
+		this.mailTemplate = mailTemplate;
 	}
 	
 	

@@ -17,7 +17,7 @@
 				rowKeyVar="rowKey">
 				<f:facet name="header">
 					<rich:columnGroup>
-						<rich:column>
+						<rich:column width="20px">
 							<h:outputText value="S No." />
 						</rich:column>
 						<rich:column>
@@ -37,6 +37,9 @@
 						</rich:column>
 						<rich:column>
 							<h:outputText value="GMAT / GRE Score" />
+						</rich:column>
+						<rich:column>
+							<h:outputText value="Advisor" />
 						</rich:column>
 						<rich:column>
 							<h:outputText value="Address" />
@@ -75,7 +78,7 @@
 				<rich:column>
 					<h:outputText value="#{student.greScore}" />
 				</rich:column>
-				
+				<rich:column/>
 				<rich:column>
 					<h:outputText value="#{student.mailingAddress}" />
 				</rich:column>
@@ -91,31 +94,26 @@
 								<h:graphicImage value="/img/edit.gif" alt="edit" />
 							</h:panelGrid>
 						</f:facet>
-						<rich:menuItem mode="ajax">
-							<h:outputText value="Generate E-mail" />
+						
+						<rich:menuItem mode="ajax" label="Assign Advisor"/>
+						<rich:menuItem mode="ajax" label="Generate E-mail">							
+							<rich:componentControl target="mailDlg" operation="show" event="click"/>							
 						</rich:menuItem>					
 						
-						<rich:menuItem mode="ajax">
-							<h:outputText value="Approved for graduation" />
-						</rich:menuItem>
-						
-						<rich:menuItem mode="ajax">
-							<h:outputText value="Withdrawn from program" />
-						</rich:menuItem>
-						
-						<rich:menuItem mode="ajax">
-							<h:outputText value="Accepted into program" />
-						</rich:menuItem>
-						
-						<rich:menuItem mode="ajax">
-							<h:outputText value="Edit" />
-						</rich:menuItem>
+						<rich:menuItem mode="ajax" label="Approved for graduation"/>						
+						<rich:menuItem mode="ajax" label="Withdrawn from program"/>						
+						<rich:menuItem mode="ajax" label="Accepted into program"/>						
+						<rich:menuItem mode="ajax" label="Mark prereqs met"/>
+						<rich:menuItem mode="ajax" label="Exam Result"/>
+						<rich:menuItem mode="ajax" label="View Student Details"/>
+						<rich:menuItem mode="ajax" label="Review Notes"/>						
+						<rich:menuItem mode="ajax" label="Edit"/>
 					</rich:dropDownMenu>
 				</rich:column>
 
 			</rich:dataTable>
 			<br />
-			<rich:dataScroller for="stdTbl" maxPages="3" fastStep="3" />
+			<rich:dataScroller for="stdTbl" maxPages="3" fastStep="3" renderIfSinglePage="false"/>
 			<br />
 
 			<a4j:commandButton value="Add Student"
@@ -228,8 +226,39 @@
 					</h:panelGroup>
 				</rich:popupPanel>
 			</a4j:outputPanel>
-		
-		</rich:tab>
+
+			<rich:popupPanel id="mailDlg" modal="true" autosized="true"
+				resizeable="false" domElementAttachment="form">
+				<f:facet name="header">
+					<h:outputText value="Mail Template" />
+				</f:facet>
+				<f:facet name="controls">
+					<h:outputLink value="#"
+						onclick="#{rich:component('mailDlg')}.hide(); return false;"
+						style="color: inherit">
+               			X
+          				 </h:outputLink>
+				</f:facet>
+				
+				<h:panelGrid columns="1">
+					<h:outputText value="To:" />
+					<h:inputText value="#{studentMgr.student.lastName}" maxlength="50" size="49"/>
+					<h:outputText value="Mail Description:" />
+					<h:inputTextarea cols="50" rows="15"
+						value="#{studentMgr.student.mailingAddress}" />
+				</h:panelGrid>
+				
+				<h:panelGroup style="display:block; text-align:right">
+					<a4j:commandButton value="Send"
+						execute="@this,out"
+						render="@form" />
+					<a4j:commandButton value="Cancel">
+						<rich:componentControl target="mailDlg" operation="hide" event="click"/>
+					</a4j:commandButton>
+				</h:panelGroup>
+				</rich:popupPanel>
+
+			</rich:tab>
 		
 		<rich:tab header="Not completed academic students">
 		</rich:tab>

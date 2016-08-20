@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity @Table(name="email_template")
@@ -17,6 +19,10 @@ public class EmailTemplate extends BaseEntity {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="EMAIL_TEMPLATE_ID")
 	private Integer emailTemplateId;
+	
+	@OneToOne
+	@JoinColumn(name="STUDENT_ID")
+	private Student student;
 	
 	@Column(name="DOCUMENT")
 	private String document;
@@ -83,6 +89,14 @@ public class EmailTemplate extends BaseEntity {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
 	}
 	
 }
