@@ -23,8 +23,8 @@ public class StudentExam extends BaseEntity {
 	private Integer stdQunId;
 	
 	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="STD_CON_ID", unique= true, nullable=true, insertable=true, updatable=true)
-	private StudentConcentration studentConcentration;
+	@JoinColumn(name="STD_CON_ID", unique= true, nullable=true, insertable=true, updatable=true,referencedColumnName="CONCENTRATION_ID")
+	private Concentration studentConcentration;
 	
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="QUESTION_ID", unique= true, nullable=true, insertable=true, updatable=true)
@@ -47,12 +47,12 @@ public class StudentExam extends BaseEntity {
 	public void setStdQunId(Integer stdQunId) {
 		this.stdQunId = stdQunId;
 	}
-
-	public StudentConcentration getStudentConcentration() {
+	
+	public Concentration getStudentConcentration() {
 		return studentConcentration;
 	}
 
-	public void setStudentConcentration(StudentConcentration studentConcentration) {
+	public void setStudentConcentration(Concentration studentConcentration) {
 		this.studentConcentration = studentConcentration;
 	}
 

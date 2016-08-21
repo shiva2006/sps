@@ -47,6 +47,8 @@ public class Questions extends BaseEntity {
 	@Column(name="ACTIVE")
 	private boolean active;
 	
+	private String tempAns="0";
+	
 	public Questions() {
 		
 	}
@@ -121,6 +123,14 @@ public class Questions extends BaseEntity {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public String getTempAns() {
+		return tempAns;
+	}
+
+	public void setTempAns(String tempAns) {
+		this.tempAns = tempAns;
 	}
 
 }
