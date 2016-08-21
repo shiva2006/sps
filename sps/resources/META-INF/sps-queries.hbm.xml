@@ -88,5 +88,9 @@
 			where con.CONCENTRATION_NAME = ?1
 		]]>
 	</sql-query>
-	
+	<query name="getQuestions">
+		<![CDATA[
+			select que from Questions que where que.concentration.concentrationId=5 and que.active=1
+		]]>
+	</query>
 </hibernate-mapping>
