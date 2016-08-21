@@ -4,8 +4,11 @@
       xsi:schemaLocation="http://jboss.org/schema/seam/pages http://jboss.org/schema/seam/pages-2.3.xsd">
 
    <navigation from-action="#{identity.login}">
-      <rule if="#{identity.loggedIn}">
+      <rule if="#{identity.loggedIn and user.role ne 'Student'}">
          <redirect view-id="/home.xhtml"/>
+      </rule>
+       <rule if="#{identity.loggedIn and user.role eq 'Student'}">
+         <redirect view-id="/studentHome.xhtml"/>
       </rule>
    </navigation>
 
