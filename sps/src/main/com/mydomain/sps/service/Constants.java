@@ -14,5 +14,7 @@ public interface Constants {
 	public static final String CHECK_USER="checkuser";
 	
 	public static final String GET_NOTES="getNotes";
+	
+	public static final String GET_QUESTIONS="getQuestions";
 
 }
