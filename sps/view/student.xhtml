@@ -39,6 +39,9 @@
 							<h:outputText value="GMAT / GRE Score" />
 						</rich:column>
 						<rich:column>
+							<h:outputText value="Concentration" />
+						</rich:column>
+						<rich:column>
 							<h:outputText value="Advisor" />
 						</rich:column>
 						<rich:column>
@@ -57,34 +60,50 @@
 					<h:outputText value="#{rowKey+1}" />
 				</rich:column>
 				<rich:column>
-					<h:outputText value="#{student.firstName}" />
+					
+					#{student[1]}
 				</rich:column>
 				<rich:column>
-					<h:outputText value="#{student.lastName}" />
+					
+					#{student[2]}
 				</rich:column>
 				
 				<rich:column>
-					<h:outputText value="#{student.otherMail}" />
+					#{student[5]}
+					
 				</rich:column>
 				<rich:column>
-					<h:outputText value="#{student.phoneNumber}" />
+					#{student[3]}
+					
 				</rich:column>
 				<rich:column>
-					<h:outputText value="#{student.entryDate}">
+					<h:outputText value="#{student[8]}">
 						<f:convertDateTime pattern="dd/MM/yy" locale="en_US" type="both"
 							timeZone="IST" />
 					</h:outputText>
 				</rich:column>
 				<rich:column>
-					<h:outputText value="#{student.greScore}" />
-				</rich:column>
-				<rich:column/>
-				<rich:column>
-					<h:outputText value="#{student.mailingAddress}" />
+					<h:outputText value="#{student[6]}" />
 				</rich:column>
 				
 				<rich:column>
-					
+					#{student[9]}
+				</rich:column>
+				
+				<rich:column>
+					#{student[10]}
+				</rich:column>
+				
+				<rich:column>
+					<h:outputText value="#{student[7]}" />
+				</rich:column>
+				
+				<rich:column>
+					#{student[11]} <br/>
+					<h:outputText value="#{student[12]}">
+						<f:convertDateTime pattern="dd/MM/yy" locale="en_US" type="both"
+							timeZone="IST" />
+					</h:outputText>
 				</rich:column>
 				<rich:column>
 					<rich:dropDownMenu mode="ajax">
@@ -95,19 +114,50 @@
 							</h:panelGrid>
 						</f:facet>
 						
-						<rich:menuItem mode="ajax" label="Assign Advisor"/>
+						<rich:menuItem mode="ajax" label="Assign Advisor"
+							render="assignUser" action="#{studentMgr.populateAdvisorsList}">
+							<a4j:param value="#{student[13]}" assignTo="#{studentMgr.stdCntId}" />
+							<a4j:param value="#{student[9]}" assignTo="#{studentMgr.conName}" />							
+						</rich:menuItem>
 						<rich:menuItem mode="ajax" label="Generate E-mail">							
 							<rich:componentControl target="mailDlg" operation="show" event="click"/>							
 						</rich:menuItem>					
 						
-						<rich:menuItem mode="ajax" label="Approved for graduation"/>						
-						<rich:menuItem mode="ajax" label="Withdrawn from program"/>						
-						<rich:menuItem mode="ajax" label="Accepted into program"/>						
-						<rich:menuItem mode="ajax" label="Mark prereqs met"/>
+						<rich:menuItem mode="ajax" label="Approved for graduation"
+							render="stdTbl" action="#{studentMgr.changeStatus}">
+							<a4j:param value="Approved" assignTo="#{studentMgr.status}" />
+							<a4j:param value="#{student[13]}" assignTo="#{studentMgr.stdCntId}" />
+						</rich:menuItem>						
+						
+						<rich:menuItem mode="ajax" label="Withdrawn from program"
+							render="stdTbl" action="#{studentMgr.changeStatus}">
+							<a4j:param value="Withdrawn" assignTo="#{studentMgr.status}" />
+							<a4j:param value="#{student[13]}" assignTo="#{studentMgr.stdCntId}" />
+						</rich:menuItem>
+												
+						<rich:menuItem mode="ajax" label="Accepted into program"
+							render="stdTbl" action="#{studentMgr.changeStatus}">
+							<a4j:param value="Accepted" assignTo="#{studentMgr.status}" />
+							<a4j:param value="#{student[13]}" assignTo="#{studentMgr.stdCntId}" />
+						</rich:menuItem>
+												
+						<rich:menuItem mode="ajax" label="Mark prereqs met"
+							render="stdTbl" action="#{studentMgr.changeStatus}">
+							<a4j:param value="PreReqs met" assignTo="#{studentMgr.status}" />
+							<a4j:param value="#{student[13]}" assignTo="#{studentMgr.stdCntId}" />
+						</rich:menuItem>
+						
 						<rich:menuItem mode="ajax" label="Exam Result"/>
-						<rich:menuItem mode="ajax" label="View Student Details"/>
-						<rich:menuItem mode="ajax" label="Review Notes"/>						
-						<rich:menuItem mode="ajax" label="Edit"/>
+						
+						<rich:menuItem mode="ajax" label="Review Notes"
+							render="reviewDlg" action="#{studentMgr.loadReviewDetails}">
+							<a4j:param value="#{student[0]}" assignTo="#{studentMgr.studentId}" />							
+						</rich:menuItem>						
+						<rich:menuItem mode="ajax" label="Edit"
+							render="out" action="#{studentMgr.editStudent}">
+							<a4j:param value="#{student[0]}" assignTo="#{studentMgr.studentId}" />
+							<a4j:param value="#{student[13]}" assignTo="#{studentMgr.stdCntId}" />
+						</rich:menuItem>
 					</rich:dropDownMenu>
 				</rich:column>
 
@@ -219,9 +269,14 @@
 					</h:panelGrid>
 					<h:panelGroup style="display:block; text-align:right">
 						<a4j:commandButton id="studentSave" value="Save"
+							rendered="#{!studentMgr.showUpdatebtn}"
 							action="#{studentMgr.saveStudent}" execute="@this,out"
 							render="@form" />
-						<a4j:commandButton id="cancel" value="Cancel"
+						<a4j:commandButton id="studentupdate" value="update"
+							rendered="#{studentMgr.showUpdatebtn}"
+							action="#{studentMgr.updateStudent}" execute="@this,out"
+							render="@form" />
+						<a4j:commandButton id="cancel" value="Cancel" execute="@this"
 							action="#{studentMgr.closeDialog}" render="@form" />
 					</h:panelGroup>
 				</rich:popupPanel>
@@ -257,6 +312,88 @@
 					</a4j:commandButton>
 				</h:panelGroup>
 				</rich:popupPanel>
+
+				<a4j:outputPanel id="reviewpnl">
+				<rich:popupPanel id="reviewDlg" modal="true" autosized="true" show="#{studentMgr.reivewTxt}"
+					resizeable="false" domElementAttachment="form">
+					<f:facet name="header">
+						<h:outputText value="Student Review(s)" />
+					</f:facet>
+					<f:facet name="controls">
+						<h:outputLink value="#"
+							onclick="#{rich:component('reviewDlg')}.hide(); return false;"
+							style="color: inherit">
+               			X
+          				 </h:outputLink>
+					</f:facet>
+					
+					 <a4j:repeat value="#{studentMgr.reviewNotes}" var="notes" rows="5" id="repeat"
+					 	rowKeyVar="rowKey">
+					 	<rich:panel styleClass="panel">
+					 		<f:facet name="header">
+	                            <h:outputText value="#{rowKey + 1}." />  (
+	                            <h:outputText value="#{notes[1]}">
+									<f:convertDateTime pattern="dd/MM/yy" locale="en_US" type="both"
+										timeZone="IST" />
+								</h:outputText>
+								)
+                        </f:facet>
+                        	<h:outputText value="#{notes[0]}" />
+					 	</rich:panel>
+					 </a4j:repeat>
+					
+					<h:panelGrid columns="1">						
+						<h:outputText value="Mail Description:" />
+						<h:inputTextarea cols="50" rows="15"
+							value="#{studentMgr.reviewTxt}" />
+					</h:panelGrid>
+
+					<h:panelGroup style="display:block; text-align:right">
+						<a4j:commandButton value="Save" execute="@this,reviewpnl" render="@form"
+							 action="#{studentMgr.addReviewTxt}"/>
+						<a4j:commandButton value="Cancel">
+							<rich:componentControl target="reviewDlg" operation="hide"
+								event="click" />
+						</a4j:commandButton>
+					</h:panelGroup>
+				</rich:popupPanel>
+				</a4j:outputPanel>
+
+
+				<a4j:outputPanel id="assignUser">
+					<rich:popupPanel id="assignUserPnl" modal="true" autosized="true"
+						show="#{studentMgr.showAssignDlg}" resizeable="false"
+						domElementAttachment="form">
+						<f:facet name="header">
+							<h:outputText value="Assgin Advisor" />
+						</f:facet>
+						<f:facet name="controls">
+							<h:outputLink value="#"
+								onclick="#{rich:component('assignUserPnl')}.hide(); return false;"
+								style="color: inherit">
+               			X
+          				 </h:outputLink>
+						</f:facet>
+
+						<h:panelGrid columns="1">
+							<h:outputText value="Assgin Advisor:" />
+							<h:selectOneMenu
+								value="#{studentMgr.advisorId}"
+								style="width: 100%;">
+								<f:selectItems value="#{studentMgr.advisorsList}" />
+							</h:selectOneMenu>
+						</h:panelGrid>
+
+						<h:panelGroup style="display:block; text-align:right">
+							<a4j:commandButton value="Update" execute="@this,assignUser"
+								render="@form" action="#{studentMgr.updateAdvisor}" />
+							<a4j:commandButton value="Cancel">
+								<rich:componentControl target="assignUserPnl" operation="hide"
+									event="click" />
+							</a4j:commandButton>
+						</h:panelGroup>
+					</rich:popupPanel>
+				</a4j:outputPanel>
 
 			</rich:tab>
 		

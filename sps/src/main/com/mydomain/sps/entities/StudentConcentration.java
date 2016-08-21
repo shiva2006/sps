@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,11 +25,11 @@ public class StudentConcentration extends BaseEntity {
 	@Column(name="STU_CON_ID")
 	private Integer stuconId;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="STUDENT_ID", unique= true, nullable=true, insertable=true, updatable=true)
 	private Student student;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="CONCENTRATION_ID", unique= true, nullable=true, insertable=true, updatable=true)
 	private Concentration concentration = new Concentration();
 	
@@ -38,14 +39,8 @@ public class StudentConcentration extends BaseEntity {
 	@Column(name="EMAIL_TEMPLATE_ID")
 	private Date emailTempleteI;
 	
-	@Column(name="APPROVED")
-	private boolean approved;
-	
-	@Column(name="WITHDRAWN")
-	private boolean withDrawn;
-	
-	@Column(name="ACCEPTED")
-	private boolean accepted;
+	@Column(name="STATUS")
+	private String status;
 	
 	@Column(name="STATUS_CHANGE_DATE")
 	private Date statusChangeOn;
@@ -100,28 +95,12 @@ public class StudentConcentration extends BaseEntity {
 		this.emailTempleteI = emailTempleteI;
 	}
 
-	public boolean isApproved() {
-		return approved;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setApproved(boolean approved) {
-		this.approved = approved;
-	}
-
-	public boolean isWithDrawn() {
-		return withDrawn;
-	}
-
-	public void setWithDrawn(boolean withDrawn) {
-		this.withDrawn = withDrawn;
-	}
-
-	public boolean isAccepted() {
-		return accepted;
-	}
-
-	public void setAccepted(boolean accepted) {
-		this.accepted = accepted;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public Date getStatusChangeOn() {

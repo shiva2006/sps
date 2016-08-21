@@ -25,11 +25,35 @@
 		]]>
 	</query>
 	
-	<query name="getAllStudents">
+	<sql-query name="getAllStudents">
 		<![CDATA[
-			select student from Student student
+			SELECT 
+				stdnt.STUDENT_ID,
+			    stdnt.FIRST_NAME,
+			    stdnt.LAST_NAME,
+			    stdnt.PHONE_NUMBER,
+			    stdnt.UCM_EMAIL,
+			    stdnt.OTHER_EMAIL,
+			    stdnt.GRE_SCORE,
+			    stdnt.MAILING_ADDRESS,
+			    stdnt.ENTRY_DATE,
+			    con.CONCENTRATION_NAME,
+			    usr.user_name,
+			    stdntcon.status,
+			    stdntcon.STATUS_CHANGE_DATE,
+			    stdntcon.STU_CON_ID
+			FROM 
+				ucm_mba.students stdnt
+			left JOIN 
+				ucm_mba.student_concentration stdntcon
+			 on stdnt.STUDENT_ID = stdntcon.STUDENT_ID
+			left JOIN ucm_mba.concentrations con
+			 on con.CONCENTRATION_ID = stdntcon.CONCENTRATION_ID
+			left JOIN ucm_mba.sps_users usr
+			 on usr.USER_ID = stdntcon.ADVISOR
 		]]>
-	</query>
+	</sql-query>
+	
 	<query name="getAllConcentration">
 		<![CDATA[
 			select new com.mydomain.sps.bean.ConcentrationBean(con.concentrationId,con.concentrationName,con.degreeCode,con.active,user.userName) from Concentration con,ConcentrationFaculty conFac,User user 
@@ -41,5 +65,28 @@
 			select user.userId,user.userName from User user where user.active=1 and user.role in ('Advisor')
 		]]>
 	</query>
+	
+	<sql-query name="getNotes">
+		<![CDATA[
+			SELECT note.NOTES, note.REVIEW_DATE FROM ucm_mba.review_notes note where note.STUDENT_ID=?1
+		]]>
+	</sql-query>
+	
+	<sql-query name="getAdvisors">
+		<![CDATA[
+			SELECT 
+				usr.USER_ID,
+			    usr.USER_NAME
+			FROM 
+				ucm_mba.concentrations con
+			JOIN
+				ucm_mba.concentration_faculty fac
+			on con.CONCENTRATION_ID = fac.CONCENTRATION_ID
+			JOIN
+				ucm_mba.sps_users usr
+			on fac.FACULTY_ID = usr.USER_ID
+			where con.CONCENTRATION_NAME = ?1
+		]]>
+	</sql-query>
 	
 </hibernate-mapping>
