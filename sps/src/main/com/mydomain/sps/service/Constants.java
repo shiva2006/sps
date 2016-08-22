@@ -16,5 +16,8 @@ public interface Constants {
 	public static final String GET_NOTES="getNotes";
 	
 	public static final String GET_QUESTIONS="getQuestions";
-
+	public static final String GET_SEARCH_CONCENTRATION="searchConcentration";
+	public static final String GET_CONCENTRATION_ID="concentrationId";
+	public static final String GET_CONCENTRATION_SERIALNO="conSerialNo";
+	
 }

@@ -29,12 +29,13 @@ public class ConcentrationBean implements Serializable {
 	private String status;
 	private Integer confacultyId;
 	private String facultyName;
-	private List<ConcentrationBean> conList =  new ArrayList<ConcentrationBean>();
+	private List<ConcentrationBean> conList = new ArrayList<ConcentrationBean>();
 	private ConcentrationBean editObject;
 	private boolean visibleFalg;
 	private List<SelectItem> advisorUsers;
 	private boolean addFlag;
 	private boolean editFlag;
+	private String searchKey;
 	
 	public ConcentrationBean(){
 		
@@ -140,6 +141,14 @@ public class ConcentrationBean implements Serializable {
 
 	public void setEditFlag(boolean editFlag) {
 		this.editFlag = editFlag;
+	}
+
+	public String getSearchKey() {
+		return searchKey;
+	}
+
+	public void setSearchKey(String searchKey) {
+		this.searchKey = searchKey;
 	}
 	
 	

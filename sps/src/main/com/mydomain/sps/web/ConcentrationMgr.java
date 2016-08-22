@@ -35,9 +35,11 @@ public class ConcentrationMgr extends BaseMgr {
 	@SuppressWarnings("unchecked")
 	public void loadConcentration(){
 		concentrationBean.setConList(baseDaoImpl.find(Constants.GET_ALL_CONCENTRATION));
+		concentrationBean.setSearchKey(null);
 	}
 	
 	public void editConcentration(ConcentrationBean bean){
+		this.resetValues();
 		concentrationBean.setVisibleFalg(Boolean.TRUE);
 		concentrationBean.setEditFlag(Boolean.TRUE);
 		concentrationBean.setEditObject(bean);
@@ -48,17 +50,43 @@ public class ConcentrationMgr extends BaseMgr {
 		}else{
 			concentrationBean.setStatus("INACTIVE");
 		}
-		concentrationBean.setConfacultyId(1);
+		this.getAdvisorsList();
+		
 		
 	}
 	
 	public void saveEditedConcentration(){
+		Integer conID = (Integer) baseDaoImpl.getSingleResult(Constants.GET_CONCENTRATION_ID, concentrationBean.getConcentrationName());
+		Concentration con = (Concentration) baseDaoImpl.loadObject(Concentration.class, conID);
+		con.setConcentrationName(concentrationBean.getConcentrationName());
+		con.setDegreeCode(concentrationBean.getDegreeCode());
+		if("ACTIVE".equalsIgnoreCase(concentrationBean.getStatus())){
+			con.setActive(Boolean.TRUE);
+		}else{
+			con.setActive(Boolean.FALSE);
+		}
+		con.setUpdatedBy(getLoggedUserId());
+		con.setUpdatedOn(new Date());
+		baseDaoImpl.update(con);
 		
+		Integer serialNo = (Integer) baseDaoImpl.getSingleResult(Constants.GET_CONCENTRATION_SERIALNO, conID);
+		ConcentrationFaculty conFac = (ConcentrationFaculty) baseDaoImpl.loadObject(ConcentrationFaculty.class, serialNo);
+		User user = (User) baseDaoImpl.loadObject(User.class, concentrationBean.getConfacultyId());
+		conFac.setFaculty(user);
+		conFac.setUpdatedBy(getLoggedUserId());
+		conFac.setUpdatedOn(new Date());
+		baseDaoImpl.update(conFac);
 	}
 	
 	public void addConcentration(){
+		this.resetValues();
 		concentrationBean.setVisibleFalg(Boolean.TRUE);
 		concentrationBean.setAddFlag(Boolean.TRUE);
+		this.getAdvisorsList();
+		
+	}
+	
+	private void getAdvisorsList() {
 		List<?> list =  baseDaoImpl.find(Constants.GET_ALL_ADVISORS);
 		concentrationBean.setAdvisorUsers(new ArrayList<SelectItem>());
 		for(Object obj : list){
@@ -71,7 +99,7 @@ public class ConcentrationMgr extends BaseMgr {
 		}
 		
 	}
-	
+
 	public void resetValues(){
 		concentrationBean.setConcentrationName(null);
 		concentrationBean.setDegreeCode(null);
@@ -80,7 +108,6 @@ public class ConcentrationMgr extends BaseMgr {
 		concentrationBean.setVisibleFalg(Boolean.FALSE);
 		concentrationBean.setAddFlag(Boolean.FALSE);
 		concentrationBean.setEditFlag(Boolean.FALSE);
-		System.out.println("------------resetValues() is called---------------");
 	}
 	
 	public void saveConcentration(){
@@ -93,8 +120,8 @@ public class ConcentrationMgr extends BaseMgr {
 			}else{
 				con.setActive(Boolean.FALSE);
 			}
-			con.setCreatedBy(1);
-			con.setUpdatedBy(1);
+			con.setCreatedBy(getLoggedUserId());
+			con.setUpdatedBy(getLoggedUserId());
 			con.setUpdatedOn(new Date());
 			con.setCreatedOn(new Date());
 			baseDaoImpl.saveObject(con);
@@ -102,15 +129,13 @@ public class ConcentrationMgr extends BaseMgr {
 			ConcentrationFaculty conFac = new ConcentrationFaculty();
 			conFac.setConcentrationId(con);
 			conFac.setFaculty(user);
-			conFac.setCreatedBy(1);
+			conFac.setCreatedBy(getLoggedUserId());
 			conFac.setCreatedOn(new Date());
-			conFac.setUpdatedBy(1);
+			conFac.setUpdatedBy(getLoggedUserId());
 			conFac.setUpdatedOn(new Date());
 			baseDaoImpl.saveObject(conFac);
 			this.resetValues();
 			this.loadConcentration();
-		}else{
-			addMessage("Can't be saved");
 		}
 		
 	}
@@ -122,6 +147,15 @@ public class ConcentrationMgr extends BaseMgr {
 			flag = Boolean.TRUE;
 		}
 		return flag;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void search(){
+		String searchKey = concentrationBean.getSearchKey();
+		if(!searchKey.trim().isEmpty() || null!=searchKey){
+			concentrationBean.setConList(baseDaoImpl.find(Constants.GET_SEARCH_CONCENTRATION,searchKey+"%"));
+		}
+		
 	}
 
 }

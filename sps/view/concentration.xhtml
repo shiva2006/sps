@@ -13,13 +13,12 @@
 	<h:form id="concentartionForm">
 		<rich:panel>
 		<h:outputText value="Enter Keyword to search"/>
-		<h:inputText style="margin-left:1%" />
-		<a4j:commandButton value="Search" styleClass="btnStyle" style="margin-left:1%" />
-		<a4j:commandButton value="Reset" styleClass="btnStyle" style="margin-left:1%"/>
+		<h:inputText style="margin-left:1%" value="#{concentrationBean.searchKey}" id="searchText"/>
+		<a4j:commandButton value="Search" actionListener="#{concentrationMgr.search}" render="conTab searchText conScroller" styleClass="btnStyle" style="margin-left:1%" />
+		<a4j:commandButton value="Reset" actionListener="#{concentrationMgr.loadConcentration}" render="conTab searchText conScroller" styleClass="btnStyle" style="margin-left:1%"/>
 		<br/><br/>
 		
 			<rich:dataTable id="conTab" value="#{concentrationBean.conList}" iterationStatusVar="itVar" var="con" rows="10" style="width:100%" noDataLabel="No Records Found">
-
 			<f:facet name="header">
 				<rich:columnGroup>	            
 		            <rich:column>
@@ -61,9 +60,13 @@
             	<a4j:commandButton render="addEditPopUp" title="Edit" image="/img/edit.gif" actionListener="#{concentrationMgr.editConcentration(con)}" >
             	</a4j:commandButton>
             </rich:column>
+           
 			</rich:dataTable>
 			<br/>
-			<a4j:commandButton value="Add" render="addEditPopUp" actionListener="#{concentrationMgr.addConcentration}"/>
+			 <rich:dataScroller id="conScroller" for="conTab" maxPages="5" fastStep="3" />
+        	<br/>
+        	
+			<a4j:commandButton value="Add Concentartion" render="addEditPopUp" actionListener="#{concentrationMgr.addConcentration}"/>
 		</rich:panel>
 
 		
@@ -84,7 +87,7 @@
 				</h:selectOneMenu>
 				<h:outputLabel value="Status : " />
 				<h:selectOneMenu value="#{concentrationBean.status}">
-					<f:selectItem itemValue="null" itemDisabled="true" />
+					<f:selectItem itemValue="null" itemLabel="--SELECT--" />
 					<f:selectItem itemLabel="ACTIVE" itemValue="ACTIVE"/>
 					<f:selectItem itemLabel="INACTIVE" itemValue="INACTIVE"/>
 				</h:selectOneMenu>
@@ -92,8 +95,8 @@
 			</h:panelGrid>
 			 
 				<a4j:commandButton style="float:right;" immediate="true" actionListener="#{concentrationMgr.resetValues}" oncomplete="#{rich:component('addEditPopUp')}.hide();" value="Cancel" />
-				<a4j:commandButton style="float:right;" render="conTab" value="Save" rendered="#{concentrationBean.addFlag}" actionListener="#{concentrationMgr.saveConcentration}" oncomplete="#{rich:component('addPopUp')}.hide();"/>
-				<a4j:commandButton style="float:right;" render="conTab" value="Save" rendered="#{concentrationBean.editFlag}" actionListener="#{concentrationMgr.saveConcentration}" oncomplete="#{rich:component('addPopUp')}.hide();"/>
+				<a4j:commandButton style="float:right;" render="conTab conScroller" value="Save" rendered="#{concentrationBean.addFlag}" actionListener="#{concentrationMgr.saveConcentration}" oncomplete="#{rich:component('addEditPopUp')}.hide();"/>
+				<a4j:commandButton style="float:right;" render="conTab conScroller" value="Save" rendered="#{concentrationBean.editFlag}" actionListener="#{concentrationMgr.saveEditedConcentration}" oncomplete="#{rich:component('addEditPopUp')}.hide();"/>
 		</rich:popupPanel>
 	</h:form>
 </ui:define>
