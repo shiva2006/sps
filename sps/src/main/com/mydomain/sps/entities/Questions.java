@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity @Table(name="questions")
 public class Questions extends BaseEntity {
@@ -47,6 +48,7 @@ public class Questions extends BaseEntity {
 	@Column(name="ACTIVE")
 	private boolean active;
 	
+	@Transient
 	private String tempAns="0";
 	
 	public Questions() {

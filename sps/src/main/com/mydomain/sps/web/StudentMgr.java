@@ -3,7 +3,6 @@ package com.mydomain.sps.web;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import javax.faces.model.SelectItem;
 import javax.mail.Address;
@@ -42,6 +41,7 @@ public class StudentMgr extends BaseMgr {
 	private StudentConcentration stdConcentration = new StudentConcentration();
 	
 	private List<Object[]> students = new ArrayList<Object[]>();
+	private List<Object[]> notCompltdstudents = new ArrayList<Object[]>();
 	private List<String> reviewNotes;
 	private List<SelectItem> concentrations;
 	private List<SelectItem> advisorsList;
@@ -59,9 +59,10 @@ public class StudentMgr extends BaseMgr {
 	private boolean showAssignDlg;
 	private boolean showUpdatebtn;
 	private boolean showMailtemp;
+	private boolean showExamResult;
 	
 	private int studentId;
-	private int advisorId;
+	private Integer advisorId;
 	private int stdCntId;
 	private int selctdStd;
 	
@@ -177,9 +178,9 @@ public class StudentMgr extends BaseMgr {
 		Transport.send(message);
 		
 		int count = baseDaoImpl.countforObjects(Constants.CHECK_USER, object[1].toString());
-		if (count != 0) {
+		if (count == 0) {
 			User user = new User();
-			user.setRole("STUDENT");
+			user.setRole("Student");
 			user.setEmailId(object[5].toString());
 			user.setLoginId(object[1].toString());
 			user.setPassword("sps@123");
@@ -194,11 +195,13 @@ public class StudentMgr extends BaseMgr {
 			mailTemplate = "";
 		}
 		addMessage("E-mail send successfully.");
+		showMailtemp = Boolean.FALSE;
 	}
 	
 	public void loadStudents() {
 		searchKey = null;
 		students = baseDaoImpl.find(Constants.GET_ALL_STUDENTS);
+		notCompltdstudents  = baseDaoImpl.find(Constants.INCOMPLETE);
 	}
 	
 	public void addStudent() {
@@ -371,11 +374,11 @@ public class StudentMgr extends BaseMgr {
 		this.showAssignDlg = showAssignDlg;
 	}
 
-	public int getAdvisorId() {
+	public Integer getAdvisorId() {
 		return advisorId;
 	}
 
-	public void setAdvisorId(int advisorId) {
+	public void setAdvisorId(Integer advisorId) {
 		this.advisorId = advisorId;
 	}
 
@@ -409,6 +412,22 @@ public class StudentMgr extends BaseMgr {
 
 	public void setSelctdStd(int selctdStd) {
 		this.selctdStd = selctdStd;
+	}
+
+	public List<Object[]> getNotCompltdstudents() {
+		return notCompltdstudents;
+	}
+
+	public void setNotCompltdstudents(List<Object[]> notCompltdstudents) {
+		this.notCompltdstudents = notCompltdstudents;
+	}
+
+	public boolean isShowExamResult() {
+		return showExamResult;
+	}
+
+	public void setShowExamResult(boolean showExamResult) {
+		this.showExamResult = showExamResult;
 	}
 	
 	

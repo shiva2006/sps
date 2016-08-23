@@ -1,0 +1,2 @@
+ALTER TABLE `ucm_mba`.`student_concentration` 
+ADD COLUMN `EXAM_STATUS` VARCHAR(45) NULL AFTER `CONDITIONS`;

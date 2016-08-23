@@ -23,7 +23,7 @@ public class StudentExam extends BaseEntity {
 	private Integer stdQunId;
 	
 	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="STD_CON_ID", unique= true, nullable=true, insertable=true, updatable=true,referencedColumnName="CONCENTRATION_ID")
+	@JoinColumn(name="STD_CON_ID", unique= true, nullable=true, insertable=true, updatable=true, referencedColumnName="CONCENTRATION_ID")
 	private Concentration studentConcentration;
 	
 	@OneToOne(cascade=CascadeType.ALL)

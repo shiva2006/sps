@@ -7,6 +7,10 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich" template="layout/template.xhtml">
 	<ui:define name="body">
+		<h:messages id="messages" globalOnly="true" styleClass="message"
+			errorClass="errormsg" infoClass="infomsg" warnClass="warnmsg"
+			rendered="#{showGlobalMessages != 'false'}" />
+			
 	<rich:tabPanel switchType="client">
 	<rich:tab header="Students">
 		
@@ -119,8 +123,9 @@
 							<a4j:param value="#{student[13]}" assignTo="#{studentMgr.stdCntId}" />
 							<a4j:param value="#{student[9]}" assignTo="#{studentMgr.conName}" />							
 						</rich:menuItem>
-						<rich:menuItem mode="ajax" label="Generate E-mail">							
-							<rich:componentControl target="mailDlg" operation="show" event="click"/>							
+						
+						<rich:menuItem mode="ajax" label="Generate E-mail"
+							render="mailDlg" action="#{studentMgr.createMailTemplate(rowKey)}">
 						</rich:menuItem>					
 						
 						<rich:menuItem mode="ajax" label="Approved for graduation"
@@ -147,12 +152,17 @@
 							<a4j:param value="#{student[13]}" assignTo="#{studentMgr.stdCntId}" />
 						</rich:menuItem>
 						
-						<rich:menuItem mode="ajax" label="Exam Result"/>
+						<rich:menuItem mode="ajax" label="Exam Result"
+							render="examResultDlg" action="#{studentHome.loadQue}">
+							<a4j:param value="#{student[1]}" assignTo="#{studentHome.userName}" />
+							<a4j:param value="#{true}" assignTo="#{studentMgr.showExamResult}" />
+						</rich:menuItem>
 						
 						<rich:menuItem mode="ajax" label="Review Notes"
 							render="reviewDlg" action="#{studentMgr.loadReviewDetails}">
 							<a4j:param value="#{student[0]}" assignTo="#{studentMgr.studentId}" />							
-						</rich:menuItem>						
+						</rich:menuItem>
+												
 						<rich:menuItem mode="ajax" label="Edit"
 							render="out" action="#{studentMgr.editStudent}">
 							<a4j:param value="#{student[0]}" assignTo="#{studentMgr.studentId}" />
@@ -283,7 +293,8 @@
 			</a4j:outputPanel>
 
 			<rich:popupPanel id="mailDlg" modal="true" autosized="true"
-				resizeable="false" domElementAttachment="form">
+				resizeable="false" domElementAttachment="form"
+				show="#{studentMgr.showMailtemp}">
 				<f:facet name="header">
 					<h:outputText value="Mail Template" />
 				</f:facet>
@@ -297,15 +308,15 @@
 				
 				<h:panelGrid columns="1">
 					<h:outputText value="To:" />
-					<h:inputText value="#{studentMgr.student.lastName}" maxlength="50" size="49"/>
-					<h:outputText value="Mail Description:" />
-					<h:inputTextarea cols="50" rows="15"
-						value="#{studentMgr.student.mailingAddress}" />
+					<h:inputText value="#{studentMgr.sendTo}" maxlength="50" size="49"/>
+					
+					<h:outputText value="#{studentMgr.mailTemplate}" escape="false"/>
 				</h:panelGrid>
 				
 				<h:panelGroup style="display:block; text-align:right">
 					<a4j:commandButton value="Send"
-						execute="@this,out"
+						action="#{studentMgr.sendMail}"
+						execute="@this,mailDlg"
 						render="@form" />
 					<a4j:commandButton value="Cancel">
 						<rich:componentControl target="mailDlg" operation="hide" event="click"/>
@@ -394,10 +405,168 @@
 						</h:panelGroup>
 					</rich:popupPanel>
 				</a4j:outputPanel>
+				
+				<a4j:outputPanel id="examResult">
+					<rich:popupPanel id="examResultDlg" modal="true" autosized="true"
+						show="#{studentMgr.showExamResult}" resizeable="false"
+						domElementAttachment="form">
+						<f:facet name="header">
+							<h:outputText value="Student Exam Result" />
+						</f:facet>
+						<f:facet name="controls">
+							<h:outputLink value="#"
+								onclick="#{rich:component('examResultDlg')}.hide(); return false;"
+								style="color: inherit">
+               			X
+          				 </h:outputLink>
+						</f:facet>
+
+						<rich:dataTable var="que" value="#{studentHome.queList}"
+							id="quesTable" rows="10" rowKeyVar="rowKey" style="width:100%">
+							<f:facet name="header">
+								<rich:columnGroup>
+									<rich:column>
+										<h:outputText value="S No." />
+									</rich:column>
+									<rich:column>
+										<h:outputText value="Questions" />
+									</rich:column>
+									<rich:column>
+										<h:outputText value="Options" />
+									</rich:column>
+								</rich:columnGroup>
+							</f:facet>
+							<rich:column>
+								<h:outputText value="#{rowKey+1}" />
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{que.description}" />
+							</rich:column>
+							<rich:column>
+								<h:selectOneRadio value="#{que.tempAns}"
+									disabled="#{studentHome.examStatus eq 'Completed'}">
+									<f:selectItem itemLabel="#{que.option1}" itemValue="1" />
+									<f:selectItem itemLabel="#{que.option2}" itemValue="2" />
+									<f:selectItem itemLabel="#{que.option3}" itemValue="3" />
+									<f:selectItem itemLabel="#{que.option4}" itemValue="4" />
+									<a4j:ajax execute="@this" />
+								</h:selectOneRadio>
+							</rich:column>
+
+						</rich:dataTable>
+
+						<h:panelGroup style="display:block; text-align:right">							
+							<a4j:commandButton value="Ok">
+								<rich:componentControl target="examResultDlg" operation="hide"
+									event="click" />
+							</a4j:commandButton>
+						</h:panelGroup>
+					</rich:popupPanel>
+				</a4j:outputPanel>
 
 			</rich:tab>
 		
 		<rich:tab header="Not completed academic students">
+			<rich:dataTable var="student" value="#{studentMgr.notCompltdstudents}"
+				id="stdTbl1" onRowMouseOver="this.style.backgroundColor='#CCCCCC'"
+				style="width:100%"
+				onRowMouseOut="this.style.backgroundColor='#FFFFFF'" rows="10"
+				rowKeyVar="rowKey">
+				<f:facet name="header">
+					<rich:columnGroup>
+						<rich:column width="20px">
+							<h:outputText value="S No." />
+						</rich:column>
+						<rich:column>
+							<h:outputText value="First name" />
+						</rich:column>
+						<rich:column>
+							<h:outputText value="Last name" />
+						</rich:column>						
+						<rich:column>
+							<h:outputText value="Email Id" />
+						</rich:column>
+						<rich:column>
+							<h:outputText value="Phone Number" />
+						</rich:column>
+						<rich:column>
+							<h:outputText value="Program Entry Date" />
+						</rich:column>
+						<rich:column>
+							<h:outputText value="GMAT / GRE Score" />
+						</rich:column>
+						<rich:column>
+							<h:outputText value="Concentration" />
+						</rich:column>
+						<rich:column>
+							<h:outputText value="Advisor" />
+						</rich:column>
+						<rich:column>
+							<h:outputText value="Address" />
+						</rich:column>
+						<rich:column>
+							<h:outputText value="Status" />
+						</rich:column>
+						
+						<rich:column>
+							<h:outputText value="Actions" />
+						</rich:column>
+					</rich:columnGroup>
+				</f:facet>
+				<rich:column>
+					<h:outputText value="#{rowKey+1}" />
+				</rich:column>
+				<rich:column>
+					
+					#{student[1]}
+				</rich:column>
+				<rich:column>
+					
+					#{student[2]}
+				</rich:column>
+				
+				<rich:column>
+					#{student[5]}
+					
+				</rich:column>
+				<rich:column>
+					#{student[3]}
+					
+				</rich:column>
+				<rich:column>
+					<h:outputText value="#{student[8]}">
+						<f:convertDateTime pattern="dd/MM/yy" locale="en_US" type="both"
+							timeZone="IST" />
+					</h:outputText>
+				</rich:column>
+				<rich:column>
+					<h:outputText value="#{student[6]}" />
+				</rich:column>
+				
+				<rich:column>
+					#{student[9]}
+				</rich:column>
+				
+				<rich:column>
+					#{student[10]}
+				</rich:column>
+				
+				<rich:column>
+					<h:outputText value="#{student[7]}" />
+				</rich:column>
+				
+				<rich:column>
+					#{student[11]} <br/>
+					<h:outputText value="#{student[12]}">
+						<f:convertDateTime pattern="dd/MM/yy" locale="en_US" type="both"
+							timeZone="IST" />
+					</h:outputText>
+				</rich:column>
+				<rich:column>
+					
+				</rich:column>
+
+			</rich:dataTable>
 		</rich:tab>
 	</rich:tabPanel>
 	</ui:define>

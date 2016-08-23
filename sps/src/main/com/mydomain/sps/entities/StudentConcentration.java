@@ -48,6 +48,9 @@ public class StudentConcentration extends BaseEntity {
 	@Column(name="CONDITIONS")
 	private String conditions;
 	
+	@Column(name="EXAM_STATUS")
+	private String examStatus;
+	
 	@Column(name="ACTIVE")
 	private boolean active;
 	
@@ -125,6 +128,14 @@ public class StudentConcentration extends BaseEntity {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public String getExamStatus() {
+		return examStatus;
+	}
+
+	public void setExamStatus(String examStatus) {
+		this.examStatus = examStatus;
 	}
 
 }
