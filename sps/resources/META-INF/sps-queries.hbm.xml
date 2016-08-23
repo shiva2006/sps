@@ -54,6 +54,37 @@
 		]]>
 	</sql-query>
 	
+	
+	<sql-query name="InCompleteStudents">
+		<![CDATA[
+			SELECT 
+				stdnt.STUDENT_ID,
+			    stdnt.FIRST_NAME,
+			    stdnt.LAST_NAME,
+			    stdnt.PHONE_NUMBER,
+			    stdnt.UCM_EMAIL,
+			    stdnt.OTHER_EMAIL,
+			    stdnt.GRE_SCORE,
+			    stdnt.MAILING_ADDRESS,
+			    stdnt.ENTRY_DATE,
+			    con.CONCENTRATION_NAME,
+			    usr.user_name,
+			    stdntcon.status,
+			    stdntcon.STATUS_CHANGE_DATE,
+			    stdntcon.STU_CON_ID
+			FROM 
+				ucm_mba.students stdnt
+			left JOIN 
+				ucm_mba.student_concentration stdntcon
+			 on stdnt.STUDENT_ID = stdntcon.STUDENT_ID
+			left JOIN ucm_mba.concentrations con
+			 on con.CONCENTRATION_ID = stdntcon.CONCENTRATION_ID
+			left JOIN ucm_mba.sps_users usr
+			 on usr.USER_ID = stdntcon.ADVISOR
+			Where stdntcon.status != 'Accepted'
+		]]>
+	</sql-query>
+	
 	<query name="getAllConcentration">
 		<![CDATA[
 			select new com.mydomain.sps.bean.ConcentrationBean(con.concentrationId,con.concentrationName,con.degreeCode,con.active,user.userName) from Concentration con,ConcentrationFaculty conFac,User user 
@@ -90,23 +121,29 @@
 	</sql-query>
 	<query name="getQuestions">
 		<![CDATA[
-			select que from Questions que where que.concentration.concentrationId=5 and que.active=1
+			select que from Questions que where que.concentration.concentrationId=?1 and que.active=1
 		]]>
 	</query>
-	<query name="searchConcentration">
+	<sql-query name="checkuser">
 		<![CDATA[
-			select new com.mydomain.sps.bean.ConcentrationBean(con.concentrationId,con.concentrationName,con.degreeCode,con.active,user.userName) from Concentration con,ConcentrationFaculty conFac,User user 
-			where con.concentrationId = conFac.concentrationId.concentrationId and conFac.faculty.userId = user.userId and user.active = 1 and ( con.concentrationName like ?1 or con.degreeCode like ?1 or user.userName like ?1 )
+			SELECT count(*) FROM ucm_mba.sps_users where user_name=?1
 		]]>
-	</query>
-	<query name="concentrationId">
+	</sql-query>
+	
+	
+	<sql-query name="getStdCon">
 		<![CDATA[
-			select con.concentrationId from Concentration con where con.concentrationName = ?1
+			SELECT con.STUDENT_ID, con.CONCENTRATION_ID, con.STU_CON_ID, con.exam_status FROM ucm_mba.students std
+				JOIN ucm_mba.student_concentration con
+				on  con.STUDENT_ID = std.STUDENT_ID
+				where std.FIRST_NAME = ?1
 		]]>
-	</query>
-	<query name="conSerialNo">
+	</sql-query>
+	
+	<sql-query name="getAnswers">
 		<![CDATA[
-			select conFac.conSerialNo from ConcentrationFaculty conFac where conFac.concentrationId = ?1
+			SELECT exam.QUESTION_ID, exam.STD_ANSWER FROM ucm_mba.student_exam exam where exam.STD_CON_ID = ?1
 		]]>
-	</query>
+	</sql-query>
+	
 </hibernate-mapping>
