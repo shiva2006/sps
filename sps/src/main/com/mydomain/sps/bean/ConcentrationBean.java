@@ -36,6 +36,7 @@ public class ConcentrationBean implements Serializable {
 	private boolean addFlag;
 	private boolean editFlag;
 	private String searchKey;
+	private String  selectedConName;
 	
 	public ConcentrationBean(){
 		
@@ -149,6 +150,14 @@ public class ConcentrationBean implements Serializable {
 
 	public void setSearchKey(String searchKey) {
 		this.searchKey = searchKey;
+	}
+
+	public String getSelectedConName() {
+		return selectedConName;
+	}
+
+	public void setSelectedConName(String selectedConName) {
+		this.selectedConName = selectedConName;
 	}
 	
 	

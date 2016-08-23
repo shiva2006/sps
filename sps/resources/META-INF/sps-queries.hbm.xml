@@ -146,4 +146,21 @@
 		]]>
 	</sql-query>
 	
+	<query name="searchConcentration">
+		<![CDATA[
+			select new com.mydomain.sps.bean.ConcentrationBean(con.concentrationId,con.concentrationName,con.degreeCode,con.active,user.userName) from Concentration con,ConcentrationFaculty conFac,User user 
+			where con.concentrationId = conFac.concentrationId.concentrationId and conFac.faculty.userId = user.userId and user.active = 1 and ( con.concentrationName like ?1 or con.degreeCode like ?1 or user.userName like ?1 )
+		]]>
+	</query>
+	<query name="concentrationId">
+		<![CDATA[
+			select con.concentrationId from Concentration con where con.concentrationName = ?1
+		]]>
+	</query>
+	<query name="conSerialNo">
+		<![CDATA[
+			select conFac.conSerialNo from ConcentrationFaculty conFac where conFac.concentrationId = ?1
+		]]>
+	</query>
+	
 </hibernate-mapping>
