@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `ucm_mba` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `ucm_mba`;
 -- MySQL dump 10.13  Distrib 5.6.17, for Win32 (x86)
 --
 -- Host: localhost    Database: ucm_mba
@@ -397,4 +399,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-08-24 11:01:54
+-- Dump completed on 2016-08-24 11:48:57
