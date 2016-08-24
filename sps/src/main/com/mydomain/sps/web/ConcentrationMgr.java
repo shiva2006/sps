@@ -57,12 +57,10 @@ public class ConcentrationMgr extends BaseMgr {
 	
 	public void saveEditedConcentration(){
 		Integer concentrationID=0;
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>concentrationBean.getConcentrationName()>>>>>>>>>>>>>>>>>>>"+concentrationBean.getConcentrationName());
 		List<?> conID = baseDaoImpl.find(Constants.GET_CONCENTRATION_ID, concentrationBean.getSelectedConName());
 		for(Object obj : conID ){
 			concentrationID = (Integer) obj;
 		}
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>concentrationID>>>>>>>>>>>>>>>>>>>"+concentrationID);
 		Concentration con = (Concentration) baseDaoImpl.loadObject(Concentration.class, concentrationID);
 		con.setConcentrationName(concentrationBean.getConcentrationName());
 		con.setDegreeCode(concentrationBean.getDegreeCode());
@@ -75,20 +73,17 @@ public class ConcentrationMgr extends BaseMgr {
 		con.setUpdatedOn(new Date());
 		baseDaoImpl.update(con);
 		
-		System.out.println(">>>>>>>>>>>>>>>>>>>concentrationBean.getConfacultyId()>>>>>>>>>>>>>>>>>>>>>>>>>>>"+concentrationBean.getConfacultyId());
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>concentrationID>>>>>>>>>>>>>>>>>>>"+con.getConcentrationId());
 		Integer serial = 0;
 		List<?> serialNo = baseDaoImpl.find(Constants.GET_CONCENTRATION_SERIALNO, con.getConcentrationId());
 		for(Object obj : serialNo ){
 			serial = (Integer) obj;
 		}
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>serial>>>>>>>>>>>>>>>>>>>>>>>>>>"+serial);
-		/*ConcentrationFaculty conFac = (ConcentrationFaculty) baseDaoImpl.loadObject(ConcentrationFaculty.class, serial);
+		ConcentrationFaculty conFac = (ConcentrationFaculty) baseDaoImpl.loadObject(ConcentrationFaculty.class, serial);
 		User user = (User) baseDaoImpl.loadObject(User.class, concentrationBean.getConfacultyId());
 		conFac.setFaculty(user);
 		conFac.setUpdatedBy(getLoggedUserId());
 		conFac.setUpdatedOn(new Date());
-		baseDaoImpl.update(conFac);*/
+		baseDaoImpl.update(conFac);
 		
 		this.loadConcentration();
 	}
