@@ -18,7 +18,9 @@
        <rich:panel>
             <f:facet name="header">Questions</f:facet>
            
-			<rich:dataTable var="que" value="#{studentHome.queList}" id="quesTable" rows="10"
+           <h:selectBooleanCheckbox value="#{studentHome.codeOfConduct}" 
+           	disabled="#{studentHome.examStatus eq 'Completed'}"/> Code of Conduct
+			<rich:dataTable var="que" value="#{studentHome.queList}" id="quesTable" rows="20"
 				rowKeyVar="rowKey" style="width:100%" >
 	        <f:facet name="header">
 	            <rich:columnGroup>	            
@@ -37,16 +39,21 @@
                 <h:outputText value="#{rowKey+1}" />               
             </rich:column>
 	        <rich:column>
-                <h:outputText value="#{que.description}" />               
+                <h:outputText value="#{que.description}" />  
             </rich:column>
             <rich:column>
-            <h:selectOneRadio value="#{que.tempAns}" disabled="#{studentHome.examStatus eq 'Completed'}">
-                    <f:selectItem itemLabel="#{que.option1}" itemValue="1"/>
-                    <f:selectItem itemLabel="#{que.option2}" itemValue="2"/>
-                    <f:selectItem itemLabel="#{que.option3}" itemValue="3"/>
-                    <f:selectItem itemLabel="#{que.option4}" itemValue="4"/>
-                    <a4j:ajax execute="@this"/>
-            </h:selectOneRadio>
+	            <h:inputText value="#{que.tempAns}" rendered="#{que.questionType eq 'TEXT'}" disabled="#{studentHome.examStatus eq 'Completed'}">
+	            	 <a4j:ajax execute="@this"/>
+	            </h:inputText>
+	           
+	            <h:selectOneMenu value="#{que.tempAns}" 
+	            	rendered="#{que.questionType eq 'DROP DOWN'}" disabled="#{studentHome.examStatus eq 'Completed'}">
+	                    <f:selectItem itemLabel="#{que.option1}" itemValue="1"/>
+	                    <f:selectItem itemLabel="#{que.option2}" itemValue="2"/>
+	                    <f:selectItem itemLabel="#{que.option3}" itemValue="3"/>
+	                    <f:selectItem itemLabel="#{que.option4}" itemValue="4"/>
+	                    <a4j:ajax execute="@this"/>
+	            </h:selectOneMenu>
             </rich:column>           
 
 			</rich:dataTable>

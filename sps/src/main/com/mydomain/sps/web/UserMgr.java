@@ -1,8 +1,12 @@
 package com.mydomain.sps.web;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.jboss.logging.Logger;
 import org.jboss.seam.ScopeType;
@@ -64,7 +68,9 @@ public class UserMgr extends BaseMgr {
 		user.setUpdatedOn(new Date());
 		if(!editUser)
 		{
-			user.setPassword("sps@123");
+			
+			String pwd = encrypt("sps@123", "Bar12345Bar12345");
+			user.setPassword(pwd);
 			user.setActive(Boolean.TRUE);
 			user.setCreatedBy(getLoggedUserId());
 			user.setCreatedOn(new Date());
@@ -78,6 +84,27 @@ public class UserMgr extends BaseMgr {
 		loadUsers();
 		user = new User();
 	}
+	
+	private String encrypt(String plainText, String secretKey) {
+		byte[] encrypted = null;
+    	try {			
+	         String text = plainText;	
+	         String key = secretKey; // 128 bit key 
+	
+	         // Create key and cipher	
+	         Key aesKey = new SecretKeySpec(key.getBytes(), "AES");	
+	         Cipher cipher = Cipher.getInstance("AES"); 
+	
+	         // encrypt the text	
+	         cipher.init(Cipher.ENCRYPT_MODE, aesKey);	
+	         encrypted = cipher.doFinal(text.getBytes());	
+	         return new String(encrypted);	
+	      } catch(Exception e) {	
+	         e.printStackTrace();	
+	      }
+    	return new String(encrypted);
+	}
+
 
 	public List<User> getUserList() {
 		return userList;

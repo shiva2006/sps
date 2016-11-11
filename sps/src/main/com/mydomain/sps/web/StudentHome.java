@@ -35,6 +35,7 @@ public class StudentHome extends BaseMgr{
 	int stdCnstId;
 	String examStatus;
 	String userName;
+	boolean codeOfConduct = Boolean.TRUE;
 
 	public void loadQue() {
 		if (userName == null )
@@ -44,6 +45,10 @@ public class StudentHome extends BaseMgr{
 		this.constId = (int) object[1]; 
 		this.stdCnstId = (int) object[2];
 		this.examStatus = (String) object[3];
+		String status = (String) object[4];
+		if ("Withdrawn".equals(status)) {
+			codeOfConduct = false;
+		}
 		queList = baseDaoImpl.find(Constants.GET_QUESTIONS, constId);
 		if("Completed".equals(examStatus)) {
 			List<Object[]> ansList = baseDaoImpl.find(Constants.GET_ANSWERS, constId);
@@ -76,13 +81,25 @@ public class StudentHome extends BaseMgr{
 		addMessage("Exam completed successfully, Thank you..!");
 		StudentConcentration conobj = (StudentConcentration) 
 				baseDaoImpl.getObject(StudentConcentration.class, stdCnstId);
-		conobj.setExamStatus("Completed");
+		if (codeOfConduct) {
+			conobj.setExamStatus("Completed");
+		} else {
+			conobj.setExamStatus("Withdrawn");
+		}
 		baseDaoImpl.update(conobj);
 		this.examStatus = "Completed";
 	}
 	
 	public List<Questions> getQueList() {
 		return queList;
+	}
+
+	public boolean isCodeOfConduct() {
+		return codeOfConduct;
+	}
+
+	public void setCodeOfConduct(boolean codeOfConduct) {
+		this.codeOfConduct = codeOfConduct;
 	}
 
 	public void setQueList(List<Questions> queList) {

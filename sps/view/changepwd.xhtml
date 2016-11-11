@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+ 
+    <h:outputStylesheet>
+        .red {
+            color: red;
+        }
+ 
+        .green {
+            color: green;
+        }
+    </h:outputStylesheet>
+    <h:head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <title>sps</title>
+      <link rel="shortcut icon" href="#{request.contextPath}/favicon.ico"/>
+      
+      <h:outputStylesheet name="theme.css"/>
+      
+   </h:head>
+    <h:form id="form">
+    	<div style="
+    display: inline-block;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 450px;
+    height: 400px;
+    margin: auto;
+    ">
+        <rich:graphValidator value="#{passwordValidationBean}" id="gv">
+            <rich:panel header="Change password" style="width:500px">
+                <rich:messages for="gv" />
+                <rich:messages globalOnly="true" />
+                <h:panelGrid columns="3">
+                    <h:outputText value="Enter new password:" />
+                    <h:inputSecret value="#{passwordValidationBean.password}" id="pass" />
+                    <rich:message for="pass" />
+                    <h:outputText value="Confirm the new password:" />
+                    <h:inputSecret value="#{passwordValidationBean.confirm}" id="conf" />
+                    <rich:message for="conf" />
+                </h:panelGrid>
+                <a4j:commandButton value="Store changes" action="#{passwordValidationBean.storeNewPassword}" />
+            </rich:panel>
+        </rich:graphValidator>
+        </div>
+    </h:form>
+</ui:composition>

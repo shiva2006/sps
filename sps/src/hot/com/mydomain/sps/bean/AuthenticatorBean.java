@@ -1,8 +1,13 @@
 package com.mydomain.sps.bean;
 
+import java.io.IOException;
+import java.security.Key;
 import java.util.List;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 import javax.ejb.Stateless;
+import javax.faces.context.FacesContext;
 
 import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Logger;
@@ -42,7 +47,8 @@ public class AuthenticatorBean implements Authenticator
 		}
     	else
     	{
-        	List<User> result = baseDaoImpl.find(Constants.GET_USERQ, credentials.getUsername(), credentials.getPassword());
+    		String pwd = decrypt(credentials.getPassword(), "Bar12345Bar12345");
+        	List<User> result = baseDaoImpl.find(Constants.GET_USERQ, credentials.getUsername(), pwd);
         	if (null == result || result.isEmpty()) 
         	{
         		StatusMessages.instance().add(Severity.ERROR,"Invalid credentials, Please try again");
@@ -52,9 +58,39 @@ public class AuthenticatorBean implements Authenticator
         	{
         		user = result.get(0);
         		authFlag=Boolean.TRUE;
+        		if(user.getRole().equals("Student") && user.getPwdChanged() == 0) {
+        			
+                    try {
+                        FacesContext.getCurrentInstance().getExternalContext()
+                                .redirect("/sps/changepwd.seam");
+                    }
+                    catch (IOException e) {
+                       
+                    }
+        		}
+        		
         	}
         }
         return authFlag;
     }
 
+    private String decrypt(String decryptedText, String secretKey) {
+    	byte[] encrypted = null;
+    	try {			
+	         String text = decryptedText;	
+	         String key = secretKey; // 128 bit key 
+	
+	         // Create key and cipher	
+	         Key aesKey = new SecretKeySpec(key.getBytes(), "AES");	
+	         Cipher cipher = Cipher.getInstance("AES"); 
+	
+	         // encrypt the text	
+	         cipher.init(Cipher.ENCRYPT_MODE, aesKey);	
+	         encrypted = cipher.doFinal(text.getBytes());	
+	         return new String(encrypted);	
+	      } catch(Exception e) {	
+	         e.printStackTrace();	
+	      }
+    	return new String(encrypted);
+	}
 }

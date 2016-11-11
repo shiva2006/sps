@@ -163,7 +163,7 @@
 							<a4j:param value="#{student[0]}" assignTo="#{studentMgr.studentId}" />							
 						</rich:menuItem>
 												
-						<rich:menuItem mode="ajax" label="Edit"
+						<rich:menuItem mode="ajax" label="Edit" disabled="#{user.role eq 'Advisor'}"
 							render="out" action="#{studentMgr.editStudent}">
 							<a4j:param value="#{student[0]}" assignTo="#{studentMgr.studentId}" />
 							<a4j:param value="#{student[13]}" assignTo="#{studentMgr.stdCntId}" />
@@ -176,7 +176,7 @@
 			<rich:dataScroller for="stdTbl" maxPages="3" fastStep="3" renderIfSinglePage="false"/>
 			<br />
 
-			<a4j:commandButton value="Add Student"
+			<a4j:commandButton value="Add Student" disabled="#{user.role eq 'Advisor'}"
 				action="#{studentMgr.addStudent}" execute="@this" render="out">
 			</a4j:commandButton>
 
@@ -293,7 +293,7 @@
 			</a4j:outputPanel>
 
 			<rich:popupPanel id="mailDlg" modal="true" autosized="true"
-				resizeable="false" domElementAttachment="form"
+				resizeable="false" domElementAttachment="form" height="500"
 				show="#{studentMgr.showMailtemp}">
 				<f:facet name="header">
 					<h:outputText value="Mail Template" />

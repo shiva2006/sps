@@ -42,6 +42,11 @@ public class Questions extends BaseEntity {
 	@Column(name="OPTION_4")
 	private String option4;
 	
+	
+	@Column(name="QUESTION_TYPE")
+	private String questionType;
+		
+	
 	@Column(name="ANSWER")
 	private String answer;
 	
@@ -49,7 +54,7 @@ public class Questions extends BaseEntity {
 	private boolean active;
 	
 	@Transient
-	private String tempAns="0";
+	private String tempAns="";
 	
 	public Questions() {
 		
@@ -133,6 +138,14 @@ public class Questions extends BaseEntity {
 
 	public void setTempAns(String tempAns) {
 		this.tempAns = tempAns;
+	}
+
+	public String getQuestionType() {
+		return questionType;
+	}
+
+	public void setQuestionType(String questionType) {
+		this.questionType = questionType;
 	}
 
 }

@@ -78,7 +78,7 @@
 					<rich:menuItem mode="ajax">
 						<h:outputText value="Re-set Password" />
 					</rich:menuItem>
-					<rich:menuItem mode="ajax"
+					<rich:menuItem mode="ajax" disabled="#{user.role eq 'Advisor'}"
 						action="#{userMgr.showEditDialog(user)}" execute="@this"
 						render="out">
 						<h:outputText value="Edit" />
@@ -92,7 +92,7 @@
         	<br/>
         		
         	 <a4j:commandButton value="Add User" action="#{userMgr.showDialog}"
-        	 	execute="@this" render="out">        		
+        	 	execute="@this" render="out" disabled="#{user.role eq 'Advisor'}">        		
    			 </a4j:commandButton>
     
         </rich:panel>

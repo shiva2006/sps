@@ -57,7 +57,8 @@
                 <h:outputText value="#{con.status}" />               
             </rich:column>
             <rich:column style="text-align: center;">
-            	<a4j:commandButton render="addEditPopUp" title="Edit" image="/img/edit.gif" actionListener="#{concentrationMgr.editConcentration(con)}" >
+            	<a4j:commandButton render="addEditPopUp" title="Edit" image="/img/edit.gif" actionListener="#{concentrationMgr.editConcentration(con)}"
+            		disabled="#{user.role eq 'Advisor'}">
             	</a4j:commandButton>
             </rich:column>
            
@@ -66,7 +67,8 @@
 			 <rich:dataScroller id="conScroller" for="conTab" maxPages="5" fastStep="3" />
         	<br/>
         	
-			<a4j:commandButton value="Add Concentartion" render="addEditPopUp" actionListener="#{concentrationMgr.addConcentration}"/>
+			<a4j:commandButton value="Add Concentartion" render="addEditPopUp" actionListener="#{concentrationMgr.addConcentration}"
+				disabled="#{user.role eq 'Advisor'}"/>
 		</rich:panel>
 
 		

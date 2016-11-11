@@ -55,6 +55,22 @@ public class ConcentrationBean implements Serializable {
 		this.facultyName = facultyName;
 	}
 	
+	public ConcentrationBean(Integer concentrationId,String concentrationName,String degreeCode,int active,String facultyName){
+		this.concentrationId = concentrationId;
+		this.concentrationName = concentrationName;
+		this.degreeCode = degreeCode;
+		if (active == 1) 
+			this.active = true;
+		else 
+			this.active = false;
+		if(Boolean.TRUE.equals(this.active)){
+			this.status = "ACTIVE";
+		}else{
+			this.status = "INACTIVE";
+		}
+		this.facultyName = facultyName;
+	}
+	
 	public Integer getConcentrationId() {
 		return concentrationId;
 	}

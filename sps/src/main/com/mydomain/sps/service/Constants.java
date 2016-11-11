@@ -6,6 +6,7 @@ public interface Constants {
 	public static final String GET_USERQ="getUserQ";
 
 	public static final String GET_ALL_STUDENTS="getAllStudents";
+	public static final String GET_ADVISOR_STUDENTS="getAdvisorStudents";
 
 	public static final String GET_ALL_CONCENTRATION = "getAllConcentration";
 	public static final String GET_ALL_ADVISORS = "getAllAdvisorUsers";

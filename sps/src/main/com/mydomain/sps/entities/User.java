@@ -44,6 +44,9 @@ public class User extends BaseEntity {
 	@Column(name="ACTIVE")
 	private boolean active;
 	
+	@Column(name="PWD_CHANGED")
+	private Integer pwdChanged;
+	
 	public User() {
 		
 	}
@@ -90,5 +93,13 @@ public class User extends BaseEntity {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
+
+	public Integer getPwdChanged() {
+		return pwdChanged;
+	}
+
+	public void setPwdChanged(Integer pwdChanged) {
+		this.pwdChanged = pwdChanged;
+	}	
 
 }

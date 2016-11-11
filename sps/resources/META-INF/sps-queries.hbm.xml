@@ -54,6 +54,37 @@
 		]]>
 	</sql-query>
 	
+	<sql-query name="getAdvisorStudents">
+		<![CDATA[
+			SELECT 
+				stdnt.STUDENT_ID,
+			    stdnt.FIRST_NAME,
+			    stdnt.LAST_NAME,
+			    stdnt.PHONE_NUMBER,
+			    stdnt.UCM_EMAIL,
+			    stdnt.OTHER_EMAIL,
+			    stdnt.GRE_SCORE,
+			    stdnt.MAILING_ADDRESS,
+			    stdnt.ENTRY_DATE,
+			    con.CONCENTRATION_NAME,
+			    usr.user_name,
+			    stdntcon.status,
+			    stdntcon.STATUS_CHANGE_DATE,
+			    stdntcon.STU_CON_ID
+			FROM 
+				ucm_mba.students stdnt
+			left JOIN 
+				ucm_mba.student_concentration stdntcon
+			 on stdnt.STUDENT_ID = stdntcon.STUDENT_ID
+			left JOIN ucm_mba.concentrations con
+			 on con.CONCENTRATION_ID = stdntcon.CONCENTRATION_ID
+			left JOIN ucm_mba.sps_users usr
+			 on usr.USER_ID = stdntcon.ADVISOR
+		where 
+			stdntcon.ADVISOR = ?1
+		]]>
+	</sql-query>
+	
 	
 	<sql-query name="InCompleteStudents">
 		<![CDATA[
@@ -85,12 +116,25 @@
 		]]>
 	</sql-query>
 	
-	<query name="getAllConcentration">
+	<sql-query name="getAllConcentration">
 		<![CDATA[
-			select new com.mydomain.sps.bean.ConcentrationBean(con.concentrationId,con.concentrationName,con.degreeCode,con.active,user.userName) from Concentration con,ConcentrationFaculty conFac,User user 
-			where con.concentrationId = conFac.concentrationId.concentrationId and conFac.faculty.userId = user.userId and user.active = 1
+			select
+			     concentrat0_.CONCENTRATION_ID as col_0_0_,
+			     concentrat0_.CONCENTRATION_NAME as col_1_0_,
+			     concentrat0_.DEGREE_CODE as col_2_0_,
+			     concentrat0_.ACTIVE as col_3_0_,
+			     user2_.USER_NAME as col_4_0_
+			 from
+			     concentrations concentrat0_ 
+			 left join
+			     concentration_faculty concentrat1_ 
+			     on concentrat0_.CONCENTRATION_ID = concentrat1_.CONCENTRATION_ID
+			 left join
+			     sps_users user2_
+			     on concentrat1_.FACULTY_ID=user2_.USER_ID
 		]]>
-	</query>
+	</sql-query>
+	
 	<query name="getAllAdvisorUsers">
 		<![CDATA[
 			select user.userId,user.userName from User user where user.active=1 and user.role in ('Advisor')
@@ -133,7 +177,7 @@
 	
 	<sql-query name="getStdCon">
 		<![CDATA[
-			SELECT con.STUDENT_ID, con.CONCENTRATION_ID, con.STU_CON_ID, con.exam_status FROM ucm_mba.students std
+			SELECT con.STUDENT_ID, con.CONCENTRATION_ID, con.STU_CON_ID, con.exam_status, con.status FROM ucm_mba.students std
 				JOIN ucm_mba.student_concentration con
 				on  con.STUDENT_ID = std.STUDENT_ID
 				where std.FIRST_NAME = ?1
